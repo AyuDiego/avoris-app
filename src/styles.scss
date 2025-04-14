@@ -1,0 +1,31 @@
+// Abstracts (Variables, Mixins - non-outputting)
+@use "styles/abstracts/variables";
+@use "styles/abstracts/mixins";
+
+// Base Styles
+@use "styles/base/reset";
+@use "styles/base/typography";
+@use "styles/base/base"; // If you have one
+
+// Layout Styles
+@use "styles/layout/grid"; // If you have one
+@use "styles/layout/layout"; // If you have one
+
+// Global Component Styles (Use sparingly with standalone components)
+@use "styles/components/buttons"; // If you have global button styles
+
+/* You can add global styles to this file, and also import other style files */
+/* BUT prefer using the structured imports above */
+
+body {
+  //   font-family: var(--font-primary); // Example using CSS variable defined via SCSS
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}

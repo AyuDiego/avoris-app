@@ -1,0 +1,17 @@
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; 
+  }
+  
+  .icon-wrapper {
+    display: inherit; 
+  
+    svg {
+      display: block; 
+      width: 1em;   
+      height: 1em;     
+      fill: currentColor; 
+    }
+  }
