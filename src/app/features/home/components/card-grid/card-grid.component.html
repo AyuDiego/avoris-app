@@ -1,1 +1,51 @@
-<p>card-grid works!</p>
+<section class="c-card-grid">
+
+  
+  <header class="c-card-grid__header">
+    <app-title
+    class="c-card-grid__title"
+    text="Vive tus propias aventuras">
+  </app-title>
+  <p class="c-card-grid__subtitle">
+    Para los que les gusta explorar y conocer mundo sin complejos
+  </p>
+</header>
+
+<div class="c-card-grid__content-wrapper">
+  <app-buttons
+  buttonType="filter"
+  label="Ver filtros"
+  leftIcon="filter"
+  class="c-card-grid__action"
+  (click)="toggleOpen()"
+  >
+</app-buttons>
+
+<div class="c-card-grid__filter-placeholder">
+  <!-- <app-filter-sidebar></app-filter-sidebar> --> <!-- Add your actual component here later -->
+  <p style="border: 1px dashed grey; padding: 1rem; height: 400px;">Filter Sidebar Placeholder</p>
+</div>
+
+    <div class="c-card-grid__items">
+      @for (group of cardGroups(); track group.groupTitle) {
+        <div class="c-card-grid__group">
+          <h2 class="c-card-grid__group-title">{{ group.groupTitle }}</h2>
+          <div class="c-card-grid__items-inner">
+            @for (card of group.cards; track card.title) {
+              <app-card
+                [data]="card"
+                (detailsClicked)="onCardDetailsClicked(card.title)"
+                (reserveClicked)="onCardReserveClicked(card.title)">
+              </app-card>
+            } @empty {
+              <p>No hay aventuras disponibles en {{ group.groupTitle }}.</p>
+            }
+          </div>
+        </div>
+      } @empty {
+         <p class="c-card-grid__empty-all">No hay aventuras disponibles en este momento.</p>
+      }
+    </div>
+  </div>  
+
+</section>

@@ -1,0 +1,95 @@
+@use "styles/abstracts/variables" as vars;
+
+.c-checkbox {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 0px;
+  gap: 8px;
+  min-height: 48px;
+  cursor: pointer;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  &__native-control {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  &__custom {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: vars.$basic-white;
+    border: 1px solid vars.$brand-purple;
+    border-radius: 2px;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  &__checkmark {
+    stroke: vars.$brand-purple;
+    transition: stroke 0.2s ease;
+  }
+
+  &__label { 
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+    color: vars.$basic-800;
+    transition: color 0.2s ease, font-weight 0.2s ease;
+  }
+
+  &--hover:not(&--checked) {
+    .c-checkbox__custom {
+      border-color: vars.$primary-800;
+    }
+    .c-checkbox__label {
+      color: vars.$basic-900;
+    }
+  }
+
+  &--checked {
+    .c-checkbox__custom {
+      background: vars.$brand-orange;
+      border-color: vars.$brand-purple;
+    }
+    .c-checkbox__checkmark {
+      stroke: vars.$brand-purple;
+    }
+    .c-checkbox__label {
+      font-weight: 700;
+      color: vars.$basic-800;
+    }
+  }
+
+  &--checked#{&}--hover {
+    .c-checkbox__custom {
+      background: vars.$secondary-500;
+      border-color: vars.$primary-800;
+    }
+    .c-checkbox__checkmark {
+      stroke: vars.$primary-800;
+    }
+    .c-checkbox__label {
+      color: vars.$basic-900;
+    }
+  }
+}
+
+app-info-tooltip {
+  display: flex;
+  align-items: center;
+}

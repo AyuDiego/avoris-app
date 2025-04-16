@@ -1,10 +1,54 @@
-<p>hero works!</p>
-<app-info-tooltip 
-  [content]="'This is some helpful information displayed in the tooltip.'">
-</app-info-tooltip>
+<section class="o-hero-slider">
+  @for (slide of slides(); let i = $index; track i) { 
+    @if (i === currentSlideIndex()) {
+      <div
+        class="o-hero-slider__background"
+        [@fadeInBackground]
+        [style.background-image]="'url(' + slide.image + ')'"
+        role="img"
+        [attr.aria-label]="slides()[currentSlideIndex()].title"
+      ></div>
+    }
+  }
 
-<app-info-tooltip 
-  [content]="'Another tooltip with different text.'" 
-  iconName="info-tooltip">  
-</app-info-tooltip>
+  <div class="o-hero-slider__content">
+    <header>
+      <h1 class="o-hero-slider__title">
+        {{ slides()[currentSlideIndex()].title }}
+      </h1>
+      <p class="o-hero-slider__subtitle">
+        {{ slides()[currentSlideIndex()].subtitle }}
+      </p>
+    </header>
+    <app-buttons
+      class="o-hero-slider__button"
+      buttonType="btn"
+      [label]="slides()[currentSlideIndex()].buttonText"
+      buttonStyle="secondary"
+    ></app-buttons>
+  </div>
 
+  <nav aria-label="Slider navigation">
+    <app-buttons
+      class="o-hero-slider__nav-button o-hero-slider__nav-button--prev"
+      buttonType="slider"
+      sliderDirection="prev"
+      (previousClicked)="onPrev()"
+    ></app-buttons>
+    <app-buttons
+      class="o-hero-slider__nav-button o-hero-slider__nav-button--next"
+      buttonType="slider"
+      sliderDirection="next"
+      (nextClicked)="onNext()"
+    ></app-buttons>
+  </nav>
+
+  <div class="o-hero-slider__controls">
+    <app-slider-indicator
+      class="o-hero-slider__indicator"
+      [currentIndex]="currentSlideIndex()"
+      [totalSlides]="slides().length"
+      (indicatorClicked)="onIndicatorClick($event)"
+    ></app-slider-indicator>
+  </div>
+</section>

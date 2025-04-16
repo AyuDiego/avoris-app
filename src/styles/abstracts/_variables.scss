@@ -1,0 +1,76 @@
+// Brand colors
+$brand-orange: #ff8f50;
+$brand-purple: #622f60;
+
+// Basic colors
+$basic-white: #ffffff;
+$basic-gray: #817781;
+$basic-white-high-alpha: rgba($basic-white, 0.72);
+$basic-medium-alpha: rgba($basic-gray, 0.5);
+$basic-050: #f8f7f8;
+$basic-100: #e0d9e0;
+$basic-200: #d1c7d1;
+$basic-300: #bfb0be;
+$basic-400: #a0989f;
+$basic-500: $basic-gray;
+$basic-600: #635a63;
+$basic-700: #494149;
+$basic-800: #342e34;
+$basic-900: #2d242d;
+
+// Primary colors
+$primary-low-alpha: rgba(98, 47, 96, 0.32);
+$primary-050: #f5eaf5;
+$primary-100: #e0c8df;
+$primary-200: #d9bad8;
+$primary-300: #c69ac4;
+$primary-400: #b677b3;
+$primary-500: #ac53a9;
+$primary-600: #864084;
+$primary-700: $brand-purple;
+$primary-800: #471f45;
+$primary-900: #2b132a;
+
+// Brand Secondary Colors
+$secondary-050: #fbf6f4;
+$secondary-100: #f4e8e1;
+$secondary-200: #ffe1d1;
+$secondary-300: #ffbc99;
+$secondary-400: $brand-orange;
+$secondary-500: #d67843;
+$secondary-600: #b85c28;
+$secondary-700: #8a451e;
+$secondary-800: #4e250e;
+$secondary-900: #31190c;
+
+// Typography
+$font-primary: "Nunito", sans-serif;
+$font-secondary: "Syne", sans-serif;
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+
+// Breakpoints
+$breakpoint-sm: 390px; // Small devices (landscape phones) -- Home Mobile
+$breakpoint-md: 744px; // Medium devices (tablets) -- Home Tablet (small)
+$breakpoint-lg: 1023px; // Large devices (desktops) -- Home Tablet (large)
+$breakpoint-xl: 1440px; // Extra large devices (large desktops) Home Desktop
+
+// Z-index
+$z-index-modal: 1000;
+$z-index-dropdown: 900;
+$z-index-tooltip: 1100;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+$border-radius-xxl: 24px; 
+$border-radius-pill: 999px;
+
+// Shadows (Example - Define if needed)
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+$shadow-base-default: 0px 4px 8px rgba(0, 0, 0, 0.2); 

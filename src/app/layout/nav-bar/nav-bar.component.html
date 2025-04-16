@@ -1,1 +1,35 @@
-<p>nav-bar works!</p>
+<nav class="c-navbar">
+    <div class="c-navbar__container">
+      <a href="/" class="c-navbar__brand" aria-label="Homepage">
+        <img src="assets/images/logoMV.svg" alt="Waveless Logo" class="c-navbar__logo" />
+      </a>
+
+      <div class="c-navbar__desktop-content">
+        <app-tabs [tabs]="TABS" class="c-navbar__tabs"></app-tabs>
+      </div>
+
+      <app-buttons
+        buttonType="btn"
+        label="Reserva"
+        buttonStyle="primary"
+        class="c-navbar__action">
+      </app-buttons>
+
+      <button
+        class="c-navbar__toggler"
+        type="button"
+        aria-controls="mobileMenu"
+        [attr.aria-expanded]="isMobileMenuOpen()"
+        aria-label="Toggle navigation"
+        (click)="toggleMobileMenu()">
+        <app-icon name="burger-menu"></app-icon>
+      </button>
+    </div>
+
+    <div class="c-navbar__mobile-menu" id="mobileMenu" [class.is-open]="isMobileMenuOpen()">
+      <a href="/aventura" class="c-navbar__mobile-link">Aventura</a>
+      <a href="/destinos" class="c-navbar__mobile-link">Destinos</a>
+      <a href="/alojamiento" class="c-navbar__mobile-link">Alojamiento</a>
+      <a href="/sobre-nosotros" class="c-navbar__mobile-link">Sobre nosotros</a>
+    </div>
+</nav>

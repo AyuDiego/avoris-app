@@ -1,0 +1,22 @@
+@use "../abstracts/variables" as vars;
+body {
+  font-family: vars.$font-primary;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: vars.$font-secondary;
+  font-weight: vars.$font-weight-bold;
+}

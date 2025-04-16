@@ -1,4 +1,3 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -24,7 +23,7 @@
       "ES2022",
       "dom"
     ],
-    "paths": { // Add this section
+    "paths": { 
     "@avoris/avoris-ui": ["src/app/shared/components/index.ts"], 
     "@avoris/avoris-ui/*": ["src/app/shared/components/*"]
   }

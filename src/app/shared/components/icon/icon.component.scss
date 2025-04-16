@@ -1,5 +1,9 @@
 :host {
-    display: inline-flex;
+  display: inline-flex; 
+  user-select: none; 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
     align-items: center;
     justify-content: center;
     line-height: 1; 

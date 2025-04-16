@@ -1,0 +1,67 @@
+<article class="c-card">
+  <div class="c-card__image-wrapper">
+    <img
+      [src]="data().imageUrl"
+      alt="{{ data().title }}"
+      class="c-card__image"
+    />
+    @if (data().tagText) {
+    <app-tag [label]="data().tagText!" class="c-card__tag"></app-tag>
+    }
+  </div>
+
+  <div class="c-card__content">
+    <div class="c-card__meta">
+      <span class="c-card__location">{{ data().location }}</span>
+      <span class="c-card__duration">{{ data().duration }}</span>
+    </div>
+    <h3 class="c-card__title">{{ data().title }}</h3>
+  </div>
+
+  <div class="c-card__bottom-bar">
+    <div class="c-card__price-and-details">
+      <div class="c-card__price-info">
+        <span class="c-card__price-label">{{ data().priceLabel }}</span>
+        <div class="c-card__price-value">
+          <span class="c-card__price-number">
+            {{ data().price.split(" ")[0] }}
+          </span>
+          <span class="c-card__price-currency">
+            {{ data().price.split(" ")[1] }}
+          </span>
+        </div>
+      </div>
+      <!-- Wrap button in span to get reference for popover positioning -->
+      <span #detailsBtnRef>
+        <app-buttons
+          class="c-card__details-link"
+          buttonType="accordion-trigger"
+          label="Ver desglose"
+          [isOpen]="isDetailsOpen()"
+          (toggle)="toggleDetails()"
+        ></app-buttons>
+      </span>
+    </div>
+    <app-buttons
+      class="c-card__reserve-button"
+      buttonType="btn"
+      buttonStyle="outline"
+      size="sm"
+      label="Reservar"
+      (click)="onReserveClick()"
+    ></app-buttons>
+  </div>
+
+  <!-- Conditionally render the modal -->
+  @if (isDetailsOpen()) {
+    <app-price-breakdown-modal
+      [triggerElement]="triggerElementRef()" 
+      [title]="data().location"
+      [duration]="data().duration"
+      [items]="breakdownItems()"
+      [finalPrice]="finalPriceValue()"
+      [finalPriceLabel]="'Total'"
+      (closeModal)="toggleDetails()"
+    ></app-price-breakdown-modal>
+  }
+</article>

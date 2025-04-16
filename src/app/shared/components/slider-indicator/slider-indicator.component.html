@@ -1,1 +1,11 @@
-<p>slider-indicator works!</p>
+<div class="c-slider-indicator"> 
+    @for (item of [].constructor(totalSlides()); let i = $index; track i) {
+      <button
+        type="button"
+        class="c-slider-indicator__dot"
+        [class.c-slider-indicator__dot--active]="i === currentIndex()"
+        (click)="onIndicatorClick(i)"
+        [attr.aria-label]="'Go to slide ' + (i + 1)"
+      ></button>
+    }
+  </div>

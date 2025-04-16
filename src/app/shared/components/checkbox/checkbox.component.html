@@ -1,0 +1,35 @@
+<div
+  class="c-checkbox"
+  [class.c-checkbox--checked]="checked()"
+  [class.c-checkbox--hover]="hover()"
+  (mouseenter)="hover.set(true)"
+  (mouseleave)="hover.set(false)"
+  (click)="toggleCheck()"
+>
+  <label class="c-checkbox__container"> 
+    <input
+      class="c-checkbox__native-control"
+      type="checkbox"
+      [checked]="checked()"
+      (change)="toggleCheck()"
+      aria-hidden="true"
+      tabindex="-1"
+    />
+ 
+    <span class="c-checkbox__custom">
+      @if (checked()) { 
+        <svg class="c-checkbox__checkmark" width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 3.5L3.66667 6L9 1" stroke-width="1.8"/>
+        </svg>
+      }
+    </span>
+ 
+    @if (label()) {
+      <span class="c-checkbox__label">{{ label() }}</span>
+    }
+ 
+    @if (tooltip()) {
+      <app-info-tooltip [content]="tooltip()"></app-info-tooltip>
+    }
+  </label>
+</div>

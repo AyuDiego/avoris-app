@@ -1,0 +1,142 @@
+@use "styles/abstracts/variables" as vars;
+@use "styles/abstracts/mixins" as mixins;
+
+.c-card-grid {
+  &__header {
+    padding: 0 2rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    padding: 3.5rem 0 1rem 0;
+  }
+  &__subtitle {
+    font-family: vars.$font-primary;
+    font-style: normal;
+    font-weight: vars.$font-weight-regular;
+    font-size: 1.25rem;
+    line-height: 1.5rem;
+    text-align: center;
+    color: vars.$basic-gray;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+  }
+
+  &__content-wrapper {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 0 16px;
+    @include mixins.breakpoint(medium) {
+      text-align: center;
+      padding-left: 96px;
+      padding-right: 96px;
+    }
+    @include mixins.breakpoint(large) {
+      text-align: left;
+      padding-left: 91.5px;
+      padding-right: 91.5px;
+    }
+    @include mixins.breakpoint(xl) {
+      padding: 0;
+      text-align: left;
+      margin-bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      padding: 0 156px;
+    }
+  }
+
+  @include mixins.breakpoint(large) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include mixins.breakpoint(xl) {
+  }
+  &__filter-placeholder {
+    display: none;
+
+    @include mixins.breakpoint(xl) {
+      display: block;
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+    }
+  }
+  &__action {
+    display: inline-flex;
+    margin-bottom: 1.5rem;
+    @include mixins.breakpoint(xl) {
+      display: none;
+    }
+  }
+
+  &__group {
+    margin-bottom: 3rem;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__group-title {
+    font-family: vars.$font-secondary;
+    font-weight: vars.$font-weight-bold;
+    font-size: 1.5rem;
+    line-height: 1.75rem;
+    color: vars.$basic-800;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  &__items {
+    @include mixins.breakpoint(medium) {
+    }
+
+    p {
+      text-align: center;
+      color: vars.$basic-500;
+      width: 100%;
+      @include mixins.breakpoint(medium) {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+  &__items-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+
+    @include mixins.breakpoint(medium) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      justify-content: normal;
+    }
+
+    @include mixins.breakpoint(large) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include mixins.breakpoint(xl) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    p {
+      text-align: center;
+      color: vars.$basic-500;
+      width: 100%;
+
+      @include mixins.breakpoint(medium) {
+        grid-column: 1 / -1;
+      }
+    }
+  }
+
+  &__empty-all {
+    text-align: center;
+    color: vars.$basic-500;
+    padding: 2rem 0;
+  }
+}

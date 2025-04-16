@@ -1,0 +1,8 @@
+@use "styles/abstracts/variables" as vars;
+
+.custom-nav-tab-color {
+  --nav-tab-color: #{vars.$secondary-600};
+}
+.custom-nav-tab-color-basic800 {
+  --nav-tab-color: #{vars.$basic-800};
+}

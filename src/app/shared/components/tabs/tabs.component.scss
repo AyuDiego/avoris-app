@@ -1,0 +1,115 @@
+@use "styles/abstracts/variables" as vars;
+
+.c-tabs {
+  &__list {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  &__item {
+    flex: none;
+  }
+
+  &__tab {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 12px;
+    gap: 6px;
+    min-height: 80px;
+    min-width: 80px;
+    height: 80px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    font-family: "Nunito", sans-serif;
+    font-size: 16px;
+    color: #342e34;
+    font-weight: 600;
+    box-sizing: border-box;
+    isolation: isolate;
+
+    &:hover,
+    &:focus-visible {
+      border-bottom: 2px solid vars.$secondary-500;
+      outline: none;
+
+      .c-tabs__active-indicator {
+        border-bottom: 12px solid vars.$secondary-500;
+        display: block;
+      }
+    }
+    &.c-tabs__tab--active {
+      border-bottom: 2px solid vars.$brand-orange;
+      font-weight: 700;
+
+      .c-tabs__active-indicator {
+        border-bottom: 12px solid vars.$brand-orange;
+        display: block;
+      }
+
+      &:hover,
+      &:focus-visible {
+        border-bottom: 2px solid vars.$secondary-500;
+
+        .c-tabs__active-indicator {
+          border-bottom: 12px solid vars.$secondary-500;
+        }
+      }
+    }
+  }
+
+  &__tab--active {
+    border-bottom: 2px solid vars.$brand-orange;
+    font-weight: 700;
+
+    .c-tabs__active-indicator {
+      display: block;
+    }
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    height: 20px;
+    font-size: 16px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    color: vars.$basic-800;
+    padding: 2px 0;
+    gap: 10px;
+  }
+
+  &__active-indicator {
+    display: none;
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    z-index: 2;
+    pointer-events: none;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 12px solid vars.$brand-orange; 
+    border-top: none;
+    background: none;
+    content: "";
+  }
+}

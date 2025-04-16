@@ -1,0 +1,28 @@
+@use "styles/abstracts/variables" as vars;
+
+.c-slider-indicator {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: vars.$basic-white-high-alpha;
+    border: 1px solid vars.$basic-white;
+    cursor: pointer;
+    user-select: none; 
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    padding: 0;
+    transition: background-color 0.3s ease;
+
+    &--active {
+      background-color: vars.$secondary-400;
+    }
+  }
+}
+ 

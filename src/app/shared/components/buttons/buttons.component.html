@@ -1,1 +1,45 @@
-<p>buttons works!</p>
+@switch (buttonType()) {
+  @case ('btn') {
+  <button class="c-button c-button--{{ buttonStyle() }} c-button--{{ size() }}" [disabled]="disabled()">
+      <span class="c-button__content">{{ label() }}</span>
+  </button>
+  }
+  @case ('slider') { 
+      <button
+        class="c-button c-button--slider-nav"
+        [class.c-button--slider-nav-left]="sliderDirection() === 'prev'"
+        [class.c-button--slider-nav-right]="sliderDirection() === 'next'"
+        [disabled]="disabled()"
+        (click)="onSliderClick()">
+        @if (sliderDirection() === 'prev') {
+          <app-icon name="chevron-left" class="c-button__icon"></app-icon>
+        } @else if (sliderDirection() === 'next') {
+          <app-icon name="chevron-right" class="c-button__icon"></app-icon>
+        }
+      </button>
+    }
+  @case ('filter') {
+  <button class="c-button c-button--filter " [disabled]="disabled()">
+      <app-icon name="filter" class="c-button__icon"></app-icon>
+      <span class="c-button__content">{{ label() }}</span>
+  </button>
+  }
+  @case ('accordion-trigger') {
+    <button
+    type="button"
+    class="c-button c-button--accordion-trigger"
+    [class.is-open]="isOpen()"
+    [disabled]="disabled()"
+    (click)="onAccordionToggle()"
+    [attr.aria-expanded]="isOpen()">
+    <span class="c-button__content">{{ label() }}</span>
+    <!-- Always render chevron-down-sm -->
+    <app-icon name="chevron-down-sm" class="c-button__icon"></app-icon>
+  </button>
+  }
+  @default {
+  <button class="c-button c-button--primary c-button--{{ size() }}" [disabled]="disabled()">
+      <span class="c-button__content">{{ label() }}</span>
+  </button>
+  }
+}

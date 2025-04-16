@@ -21,7 +21,6 @@ export class IconComponent {
   readonly name = input.required<string>(); 
 
   constructor() {
-    // Effect to load icon when the 'name' input signal changes
     effect(() => {
       const name = this.name();
       if (name) {
@@ -35,6 +34,6 @@ export class IconComponent {
       } else {
         this.svgContent.set(null);
       }
-    });
+    }, { allowSignalWrites: true });
   }
 }

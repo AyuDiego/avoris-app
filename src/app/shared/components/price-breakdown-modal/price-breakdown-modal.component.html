@@ -1,0 +1,44 @@
+ 
+<div class="c-price-breakdown-modal__content">
+  <header class="c-price-breakdown-modal__header">
+    <h2 class="c-price-breakdown-modal__title">Desglose de precios</h2>
+    <button
+      class="c-price-breakdown-modal__close-btn"
+      (click)="onClose()"
+      aria-label="Cerrar desglose"
+    >
+      <app-icon name="close"></app-icon>
+    </button>
+  </header>
+
+  <section class="c-price-breakdown-modal__details">
+    <div class="c-price-breakdown-modal__details--info">
+        <h3 class="c-price-breakdown-modal__item-title">
+          {{ title() }}
+          <span class="c-price-breakdown-modal__item-duration">{{
+            duration()
+          }}</span>
+        </h3>
+        <ul class="c-price-breakdown-modal__list">
+          @for(item of items(); track item.label) {
+          <li class="c-price-breakdown-modal__list-item">
+            <span class="c-price-breakdown-modal__item-label">{{
+              item.label
+            }}</span>
+            <span class="c-price-breakdown-modal__item-value">{{
+              item.value
+            }}</span>
+          </li>
+          }
+        </ul>
+
+    </div>
+    <div class="c-price-breakdown-modal__total">
+        <span class="c-price-breakdown-modal__final-label">{{
+          finalPriceLabel()
+        }}</span>
+        <span class="c-price-breakdown-modal__final-value">{{ finalPrice() }}</span>
+
+    </div>
+  </section>
+</div>

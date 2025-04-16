@@ -1,0 +1,55 @@
+/* Nunito - Regular 400 / SemiBold 600 / Bold 700 */
+@font-face {
+    font-family: 'Nunito';
+    src: url('/assets/fonts/nunito/nunito-sans-v15-latin-regular.woff2') format('woff2'),
+         url('/assets/fonts/nunito/nunito-sans-v15-latin-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Nunito';
+    src: url('/assets/fonts/nunito/nunito-sans-v15-latin-600.woff2') format('woff2'),
+         url('/assets/fonts/nunito/nunito-sans-v15-latin-600.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Nunito';
+    src: url('/assets/fonts/nunito/nunito-sans-v15-latin-700.woff2') format('woff2'),
+         url('/assets/fonts/nunito/nunito-sans-v15-latin-700.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* Syne - Regular 400 / SemiBold 600 / Bold 700 */
+  @font-face {
+    font-family: 'Syne';
+    src: url('/assets/fonts/syne/syne-v22-latin-regular.woff2') format('woff2'),
+         url('/assets/fonts/syne/syne-v22-latin-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Syne';
+    src: url('/assets/fonts/syne/syne-v22-latin-600.woff2') format('woff2'),
+         url('/assets/fonts/syne/syne-v22-latin-600.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Syne';
+    src: url('/assets/fonts/syne/syne-v22-latin-700.woff2') format('woff2'),
+         url('/assets/fonts/syne/syne-v22-latin-700.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }

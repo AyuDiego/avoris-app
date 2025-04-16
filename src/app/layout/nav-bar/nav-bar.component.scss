@@ -1,0 +1,127 @@
+@use "styles/abstracts/variables" as vars;
+@use "styles/abstracts/mixins" as mixins;
+
+.c-navbar {
+  background-color: vars.$basic-white;
+  box-shadow: inset 0 -1px 0 0 vars.$brand-orange;
+  position: relative;
+
+  &__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 0 1rem;
+    @include mixins.breakpoint(medium) {
+      padding: 0 1.5rem;
+    }
+    @include mixins.breakpoint(large) {
+      padding: 0 2rem;
+    }
+    @include mixins.breakpoint(xl) {
+    }
+  }
+
+  &__brand {
+    display: inline-block;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  &__logo {
+    height: 30px;
+    display: block;
+  }
+  &__desktop-content {
+    display: none;
+  }
+  &__toggler {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    display: block;
+
+    app-icon {
+      font-size: 1.5rem;
+      color: vars.$brand-purple;
+    }
+  }
+  &__mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: vars.$basic-white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out,
+      visibility 0s linear 0.3s;
+
+    &.is-open {
+      max-height: 500px;
+      opacity: 1;
+      visibility: visible;
+      padding: 1rem 0;
+      transition: max-height 0.3s ease-in, opacity 0.3s ease-in,
+        visibility 0s linear 0s, padding 0.3s ease-in;
+    }
+  }
+
+  &__mobile-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: vars.$basic-700;
+    border-bottom: 1px solid vars.$basic-100;
+    text-align: center;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: vars.$basic-050;
+    }
+  }
+
+  &__action {
+    display: none;
+  }
+
+  @include mixins.breakpoint(large) {
+    &__desktop-content {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+      margin: 0 1.5rem;
+    }
+    &__action {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    &__toggler {
+      display: none;
+    }
+
+    &__mobile-menu {
+      display: none;
+    }
+  }
+  .c-navbar__tabs {
+    @include mixins.breakpoint(medium) {
+    }
+  }
+}

@@ -1,3 +1,5 @@
+@use "styles/abstracts/variables" as vars;
+
 :host {
   display: inline-block;
 }
@@ -7,12 +9,11 @@
   position: relative;
   &__trigger {
     font-size: 1.2em;
-    color: #342e34;
+    color: vars.$basic-800;
     fill: none;
   }
 
   &__content {
-    // --- Appearance ---
     width: 200px;
     padding: 10px;
     background: #fff;
@@ -20,14 +21,12 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     color: #333;
 
-    // --- Positioning ---
     position: absolute;
     bottom: calc(100% + 10px);
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 
-    // --- Visibility & Transition ---
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.2s ease-in-out, visibility 0s linear 0.2s;
@@ -45,15 +44,13 @@
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 8px solid #fff;
+    border-top: 8px solid vars.$basic-white;
 
-    // --- Positioning ---
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
   }
 
-  // --- Interaction ---
   &:hover &__content {
     visibility: visible;
     opacity: 1;
