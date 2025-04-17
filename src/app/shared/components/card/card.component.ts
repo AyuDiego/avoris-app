@@ -1,14 +1,15 @@
 import { CurrencyPipe } from '@angular/common';
 import {
-  afterNextRender,
   Component,
-  computed,
   ElementRef,
-  input,
   OnDestroy,
+  ViewChild,
+  computed,
+  inject,
+  input,
   output,
   signal,
-  ViewChild,
+  afterNextRender,
 } from '@angular/core';
 import {
   BreakdownItem,
@@ -31,24 +32,23 @@ import { CardData } from 'src/app/mock-data/cards.mock';
     TextInputComponent,
     PriceBreakdownModalComponent,
   ],
+  providers: [CurrencyPipe],
   templateUrl: './card.component.html',
   styleUrl: './card.component.scss',
 })
 export class CardComponent implements OnDestroy {
   readonly data = input.required<CardData>();
-
   readonly detailsClicked = output<void>();
   readonly reserveClicked = output<void>();
   readonly isDetailsOpen = signal(false);
 
-  @ViewChild('detailsBtnRef') detailsButtonRef:
-    | ElementRef<HTMLElement>
-    | undefined;
+  @ViewChild('detailsBtnRef') detailsButtonRef: ElementRef<HTMLElement> | undefined;
 
   readonly triggerElementRef = signal<HTMLElement | null>(null);
-
   readonly isTablet = signal(window.matchMedia('(min-width: 744px)').matches);
-  private _mql = window.matchMedia('(min-width: 744px)');
+
+  private readonly _mql = window.matchMedia('(min-width: 744px)');
+  private readonly _mqlListener = (e: MediaQueryListEvent) => this.isTablet.set(e.matches);
 
   readonly breakdownItems = computed<BreakdownItem[]>(() => {
     const cardData = this.data();
@@ -64,11 +64,16 @@ export class CardComponent implements OnDestroy {
 
   readonly finalPriceValue = computed<string>(() => {
     const cardData = this.data();
-    return cardData.priceDetails?.final ?? cardData.price;
+    if (cardData.priceDetails?.final) {
+      return cardData.priceDetails.final;
+    }
+    return this.currencyPipe.transform(cardData.price, 'EUR', 'symbol', '1.2-2', 'es-ES') ?? 'N/A';
   });
 
+  private readonly currencyPipe = inject(CurrencyPipe);
+
   constructor() {
-    this._mql.addEventListener('change', (e) => this.isTablet.set(e.matches));
+    this._mql.addEventListener('change', this._mqlListener);
 
     afterNextRender(() => {
       if (this.detailsButtonRef) {
@@ -78,7 +83,7 @@ export class CardComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    throw new Error('Method not implemented.');
+    this._mql.removeEventListener('change', this._mqlListener);
   }
 
   onDetailsClick(): void {
@@ -91,6 +96,5 @@ export class CardComponent implements OnDestroy {
 
   toggleDetails(): void {
     this.isDetailsOpen.update((open) => !open);
-    console.log('Details toggled, new state:', this.isDetailsOpen());
   }
 }

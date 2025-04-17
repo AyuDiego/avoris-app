@@ -9,3 +9,4 @@ export * from './tabs/tabs.component';
 export * from './tag/tag.component';
 export * from './text-input/text-input.component';
 export * from './title/title.component';
+export * from './filter-modal/filter-modal.component';

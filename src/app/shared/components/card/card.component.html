@@ -23,15 +23,9 @@
       <div class="c-card__price-info">
         <span class="c-card__price-label">{{ data().priceLabel }}</span>
         <div class="c-card__price-value">
-          <span class="c-card__price-number">
-            {{ data().price.split(" ")[0] }}
-          </span>
-          <span class="c-card__price-currency">
-            {{ data().price.split(" ")[1] }}
-          </span>
+          {{ data().price | currency:'EUR':'symbol':'1.2-2':'es-ES' }}
         </div>
       </div>
-      <!-- Wrap button in span to get reference for popover positioning -->
       <span #detailsBtnRef>
         <app-buttons
           class="c-card__details-link"
@@ -52,7 +46,6 @@
     ></app-buttons>
   </div>
 
-  <!-- Conditionally render the modal -->
   @if (isDetailsOpen()) {
     <app-price-breakdown-modal
       [triggerElement]="triggerElementRef()" 

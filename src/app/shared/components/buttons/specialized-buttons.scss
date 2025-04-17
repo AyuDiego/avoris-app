@@ -1,0 +1,118 @@
+@use "styles/abstracts/variables" as vars;
+
+.c-button {
+  &--filter {
+    padding: 8px 14px;
+    background-color: vars.$secondary-050;
+    color: vars.$basic-800;
+    border-color: vars.$basic-100;
+
+    .c-button__icon {
+      color: vars.$basic-800;
+      fill: none;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: vars.$secondary-100;
+      border-color: vars.$basic-200;
+      color: vars.$basic-900;
+    }
+
+    &[disabled] {
+      background-color: transparent;
+      border-color: vars.$basic-400;
+      color: vars.$basic-400;
+      cursor: not-allowed;
+
+      .c-button__icon {
+        color: vars.$basic-900;
+      }
+    }
+  }
+
+  &--slider-controls {
+    display: flex;
+    gap: 5px;
+  }
+
+  &--slider-nav {
+    padding: 8px;
+    min-height: 40px;
+    width: 40px;
+    background: linear-gradient(
+        0deg,
+        vars.$primary-low-alpha,
+        vars.$primary-low-alpha
+      ),
+      vars.$basic-white;
+    border-radius: 2px;
+    border: none;
+
+    .c-button__icon {
+      color: vars.$basic-white;
+      fill: vars.$basic-white;
+      width: 13px;
+      height: 8px;
+    }
+
+    &:hover:not(:disabled) {
+      background: vars.$brand-purple;
+    }
+
+    &:disabled,
+    &[disabled] {
+      background: vars.$basic-100;
+      cursor: not-allowed;
+
+      .c-button__icon {
+        color: vars.$basic-400;
+        fill: vars.$basic-400;
+      }
+    }
+  }
+
+  &--accordion-trigger {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    gap: 4px;
+    font-family: vars.$font-primary;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+    text-decoration-line: underline;
+    color: vars.$brand-purple;
+    border-radius: 0;
+
+    .c-button__icon {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      transition: fill 0.2s ease-in-out, transform 0.2s ease-in-out;
+      transform-origin: center;
+    }
+
+    &.is-open .c-button__icon {
+      transform: rotate(-180deg);
+    }
+
+    &:hover:not(:disabled) {
+      background: none;
+      color: vars.$primary-800;
+    }
+
+    &:disabled,
+    &[disabled] {
+      background: none;
+      border: none;
+      color: vars.$basic-400;
+      cursor: not-allowed;
+      text-decoration-line: none;
+
+      .c-button__icon {
+        fill: vars.$basic-400;
+      }
+    }
+  }
+}

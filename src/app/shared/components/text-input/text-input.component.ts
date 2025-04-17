@@ -1,5 +1,4 @@
- 
-import { Component, input, output, viewChild, ElementRef, Signal } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 
 export type TextInputType = 'filter-input-text' | 'nav-tab-main' | 'icon-input';
@@ -10,7 +9,7 @@ export type TextInputSize = 'sm' | 'md' | 'lg';
   standalone: true,
   imports: [IconComponent],
   templateUrl: './text-input.component.html',
-  styleUrl: './text-input.component.scss'
+  styleUrl: './text-input.component.scss',
 })
 export class TextInputComponent {
   readonly type = input<TextInputType>('filter-input-text');
@@ -23,17 +22,17 @@ export class TextInputComponent {
   readonly disabled = input<boolean>(false);
   readonly navTabClass = input<string>('custom-nav-tab-color');
 
-
-  // Para nav-tab-main
   readonly title = input<string>('');
   readonly chevronDown = input<boolean>(false);
   readonly rightIcon = input<string>('chevron-down');
   readonly rightIconStyle = input<string>('');
   readonly chevronClicked = output<void>();
 
-  // Para icon-input
-  readonly inputValue = input<string>('');
-  readonly inputPlaceholder = input<string>('');
-}
+  readonly inputValue = input<string>(''); 
+  readonly inputValueChange = output<string>();
 
-    
+  onInternalInputChange(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.inputValueChange.emit(target.value);
+  }
+}

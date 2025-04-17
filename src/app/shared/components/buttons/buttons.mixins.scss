@@ -1,0 +1,67 @@
+@use "styles/abstracts/variables" as vars;
+
+@mixin button-base {
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  border-radius: 208px;
+  text-align: center;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-family: vars.$font-primary;
+  font-style: normal;
+  font-weight: 600;
+  text-decoration: none;
+  background-color: #eee;
+  color: vars.$basic-700;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+}
+
+@mixin button-variant($bg-color, $text-color, $border-color, $hover-bg) {
+  background-color: $bg-color;
+  color: $text-color;
+  border-color: $border-color;
+
+  &:hover:not(:disabled) {
+    background-color: $hover-bg;
+    border-color: $hover-bg;
+  }
+}
+
+@mixin button-outline-variant($color, $hover-color) {
+  color: $color;
+  border-color: $color;
+  background-color: transparent;
+
+  &:hover:not(:disabled) {
+    border-color: $hover-color;
+    color: $hover-color;
+  }
+
+  &:disabled,
+  &[disabled] {
+    background-color: transparent;
+    border-color: vars.$basic-500;
+    color: vars.$basic-500;
+  }
+}
+
+@mixin button-disabled {
+  background-color: vars.$basic-400;
+  border-color: vars.$basic-400;
+  color: vars.$basic-600;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: vars.$basic-400;
+    border-color: vars.$basic-400;
+    color: vars.$basic-600;
+  }
+}

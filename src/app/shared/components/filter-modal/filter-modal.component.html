@@ -1,0 +1,105 @@
+<div class="c-filter-modal__content">
+  <header class="c-filter-modal__header">
+    <h2 class="c-filter-modal__title">Filtrar mi búsqueda</h2>
+    @if (!hideHeader()) {
+    <button
+      class="c-filter-modal__close-btn"
+      (click)="onClose()"
+      aria-label="Cerrar filtros"
+    >
+      <app-icon name="close"></app-icon>
+    </button>
+  }
+  </header>
+
+  <section class="c-filter-modal__body">
+    <!-- Destinos Section -->
+    <app-text-input
+      type="nav-tab-main"
+      leftIcon="world"
+      title="Destinos"
+      [chevronDown]="isDestinationOpen()"
+      (chevronClicked)="toggleDestination()"
+    ></app-text-input>
+    @if (isDestinationOpen()) {
+    <div class="c-filter-modal__destination-content">
+      <p>Destinos content area...</p>
+    </div>
+    }
+    <!-- Aventura Section -->
+    <app-text-input
+      type="nav-tab-main"
+      leftIcon="mountains"
+      title="Aventura"
+      [chevronDown]="isAdventureOpen()"
+      (chevronClicked)="toggleAdventure()"
+    ></app-text-input>
+    @if (isAdventureOpen()) {
+    <div class="c-filter-modal__adventure-content">
+      @for (filter of visibleAdventureFilters(); track filter.key) {
+      <app-checkbox
+        [label]="filter.label"
+        [checked]="checkedTags().get(filter.key) ?? false"
+        (checkedChange)="onTagCheckedChange($event, filter.key)"
+        [tooltip]="'Filtra por ' + filter.label"
+      ></app-checkbox>
+      } @if (hiddenAdventureFiltersCount() > 0) {
+      <button
+        type="button"
+        class="c-filter-modal__show-more"
+        (click)="toggleShowAllAdventureFilters()"
+      >
+        {{
+          showAllAdventureFilters()
+            ? "Ver menos"
+            : "Ver " + hiddenAdventureFiltersCount() + " más"
+        }}
+      </button>
+      }
+    </div>
+    }
+    <!-- Alojamiento --> 
+    <app-text-input
+    type="nav-tab-main"
+    leftIcon="house"
+    title="Alojamiento"
+    [chevronDown]="isAccommodationOpen()"
+    (chevronClicked)="toggleAccommodation()"
+  ></app-text-input>
+  @if (isAccommodationOpen()) {
+  <div class="c-filter-modal__accommodation-content">
+    <p>Alojamiento content area...</p>
+  </div>
+  }
+     <!-- Precio -->
+    <app-text-input
+      type="nav-tab-main"
+      leftIcon="tag"
+      title="Precio"
+      [chevronDown]="isPriceOpen()"
+      (chevronClicked)="togglePrice()"
+    ></app-text-input>
+    @if (isPriceOpen()) {
+    <div class="c-filter-modal__price-content">
+      <app-text-input
+        type="icon-input"
+        leftIcon="tag"
+        [inputValue]="minPrice()"
+        (inputValueChange)="onMinPriceChange($event)"
+        [placeholder]="'Mínimo'"
+        [value]="minPrice()"
+        [disabled]="false"
+      ></app-text-input>
+      <app-text-input
+        type="icon-input"
+        leftIcon="tag"
+        [inputValue]="maxPrice()"
+        (inputValueChange)="onMaxPriceChange($event)"
+        [placeholder]="'Máximo'"
+        [value]="maxPrice()"
+        [disabled]="false"
+      ></app-text-input>
+    </div>
+    }
+  </section>
+</div>

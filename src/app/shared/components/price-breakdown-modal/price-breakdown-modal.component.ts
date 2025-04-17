@@ -36,7 +36,7 @@ export class PriceBreakdownModalComponent implements OnDestroy {
 
   readonly closeModal = output<void>();
 
-  private readonly el = inject(ElementRef);
+  private readonly el = inject(ElementRef<HTMLElement>);
   private readonly renderer = inject(Renderer2);
   private readonly document = inject(DOCUMENT);
 
@@ -85,31 +85,41 @@ export class PriceBreakdownModalComponent implements OnDestroy {
     this.removeClickOutsideListener();
   }
 
+  /**
+   * Posiciona el popup justo debajo del triggerElement.
+   * Si el modal está dentro de un contenedor con position: relative, calcula la posición relativa a ese contenedor.
+   * Si está en el body, calcula la posición absoluta respecto al documento.
+   */
   private positionPopup(
     triggerEl: HTMLElement,
     hostElement: HTMLElement
   ): void {
     const triggerRect = triggerEl.getBoundingClientRect();
-    const top = triggerRect.bottom + window.scrollY + 5;
-    let left = triggerRect.left + window.scrollX;
+    let offsetParent = hostElement.offsetParent as HTMLElement | null;
+    if (!offsetParent) offsetParent = document.body;
 
-    if (this.isPopupMode()) {
-      const modalWidth = hostElement.offsetWidth;
-      const windowWidth = window.innerWidth;
+    const parentRect = offsetParent.getBoundingClientRect();
+ 
+    let top = triggerRect.bottom - parentRect.top + 4;  
+    let left = triggerRect.left - parentRect.left;
+ 
+    const parentWidth = offsetParent === document.body ? window.innerWidth : offsetParent.offsetWidth;
 
-      if (left + modalWidth > windowWidth) {
-        left = windowWidth - modalWidth - 10;
-        left = Math.max(left, 10);
-      }
-    }
-
+  
+    this.renderer.setStyle(hostElement, 'position', 'absolute');
     this.renderer.setStyle(hostElement, 'top', `${top}px`);
-    this.renderer.setStyle(hostElement, 'left', `${left}px`);
+    this.renderer.setStyle(hostElement, 'left', `${left}px`); 
+    this.renderer.setStyle(hostElement, 'transform', 'none');
+    this.renderer.setStyle(hostElement, 'z-index', '1050');
   }
 
   private resetPosition(hostElement: HTMLElement): void {
+    this.renderer.removeStyle(hostElement, 'position');
     this.renderer.removeStyle(hostElement, 'top');
     this.renderer.removeStyle(hostElement, 'left');
+    this.renderer.removeStyle(hostElement, 'width');
+    this.renderer.removeStyle(hostElement, 'transform');
+    this.renderer.removeStyle(hostElement, 'z-index');
   }
 
   private handleClickOutside = (event: MouseEvent) => {

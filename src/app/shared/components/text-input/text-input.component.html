@@ -1,62 +1,53 @@
-<!-- TODO: Si al final tengo tiempo hacer los disabled aunque no se utilicen -->
-@switch(type()) {
-    @case('nav-tab-main') {
-        <div class="c-text-input-nav-bar" [class]="navTabClass()">
-          <span class="c-text-input-nav-bar__icon">
-            <app-icon
-              [name]="leftIcon()"
-              [style.color]="'var(--nav-tab-color)'"
-            ></app-icon>
-          </span>
-          <span
-            class="c-text-input-nav-bar__title"
-            [style.color]="'var(--nav-tab-color)'"
-          >{{ title() }}</span>
-          <button
-            type="button"
-            class="c-text-input-nav-bar__chevron"
-            (click)="chevronClicked.emit()"
-            aria-label="Expandir"
-            [style.color]="'var(--nav-tab-color)'"
-          >
-            <app-icon
-              [name]="chevronDown() ? 'chevron-down' : 'chevron-right'"
-              [style.color]="'var(--nav-tab-color)'"
-            ></app-icon>
-          </button>
-        </div>
-      }
-    @case('icon-input') {
-      <div class="c-text-input-icon-input">
-        <span class="c-text-input-icon-input__icon">
-          <app-icon [name]="leftIcon()" [style]="iconStyle()"></app-icon>
-        </span>
-        <input
-          class="c-text-input-icon-input__field"
-          [placeholder]="inputPlaceholder() || placeholder()"
-          [value]="inputValue() || value()"
-          [disabled]="disabled()"
-        />
-      </div>
-    }
-    @default {
-      <div class="c-text-input-filter">
-        <span class="c-text-input-filter__icon">
-          <app-icon [name]="leftIcon()" [style]="iconStyle()"></app-icon>
-        </span>
-        <div class="c-text-input-filter__field-group">
-          <label class="c-text-input-filter__label">{{ label() }}</label>
-          <input
-            class="c-text-input-filter__field"
-            type="text"
-            [placeholder]="placeholder()"
-            [value]="value()"
-            [disabled]="disabled()"
-          >
-        </div>
-        <span class="c-text-input-filter__icon c-text-input-filter__icon--right">
-          <app-icon name="rectangle-down"></app-icon>
-        </span>
-      </div>
-    }
-  }
+@switch(type()) { @case('nav-tab-main') {
+<div class="c-text-input-nav-bar" [class.is-open]="chevronDown()">
+  <span class="c-text-input-nav-bar__icon">
+    <app-icon [name]="leftIcon()"></app-icon>
+  </span>
+  <span class="c-text-input-nav-bar__title">{{ title() }}</span>
+  <button
+    type="button"
+    class="c-text-input-nav-bar__chevron"
+    (click)="chevronClicked.emit()"
+    aria-label="Expandir"
+    [attr.aria-expanded]="chevronDown()"
+  >
+    <app-icon
+      name="chevron-right"
+      [class.is-rotated]="chevronDown()"
+      class="c-text-input-nav-bar__chevron-icon"
+    ></app-icon>
+  </button>
+</div>
+} @case('icon-input') {
+<div class="c-text-input-icon-input">
+  <span class="c-text-input-icon-input__icon">
+    <app-icon [name]="leftIcon()" [style]="iconStyle()"></app-icon>
+  </span>
+  <input
+    class="c-text-input-icon-input__field"
+    [placeholder]=" placeholder()"
+    [value]="inputValue() || value()"
+    [disabled]="disabled()"
+    (input)="onInternalInputChange($event)"
+  />
+</div>
+} @default {
+<div class="c-text-input-filter">
+  <span class="c-text-input-filter__icon">
+    <app-icon [name]="leftIcon()" [style]="iconStyle()"></app-icon>
+  </span>
+  <div class="c-text-input-filter__field-group">
+    <label class="c-text-input-filter__label">{{ label() }}</label>
+    <input
+      class="c-text-input-filter__field"
+      type="text"
+      [placeholder]="placeholder()"
+      [value]="value()"
+      [disabled]="disabled()"
+    />
+  </div>
+  <span class="c-text-input-filter__icon c-text-input-filter__icon--right">
+    <app-icon name="rectangle-down"></app-icon>
+  </span>
+</div>
+} }

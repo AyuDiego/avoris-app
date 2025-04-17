@@ -47,6 +47,7 @@ $secondary-900: #31190c;
 $font-primary: "Nunito", sans-serif;
 $font-secondary: "Syne", sans-serif;
 $font-weight-regular: 400;
+$font-weight-semibold: 600;
 $font-weight-bold: 700;
 
 // Breakpoints
@@ -57,6 +58,7 @@ $breakpoint-xl: 1440px; // Extra large devices (large desktops) Home Desktop
 
 // Z-index
 $z-index-modal: 1000;
+$z-index-modal-fullscreen: 1200;
 $z-index-dropdown: 900;
 $z-index-tooltip: 1100;
 
@@ -65,7 +67,7 @@ $border-radius-sm: 4px;
 $border-radius-md: 8px;
 $border-radius-lg: 12px;
 $border-radius-xl: 16px;
-$border-radius-xxl: 24px; 
+$border-radius-xxl: 24px;
 $border-radius-pill: 999px;
 
 // Shadows (Example - Define if needed)
@@ -73,4 +75,14 @@ $shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
 $shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 $shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-$shadow-base-default: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+$shadow-base-default: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+// Spacing
+$spacing-base-unit: 0.25rem;
+
+$spacing-xs: $spacing-base-unit * 1;
+$spacing-sm: $spacing-base-unit * 2;
+$spacing-md: $spacing-base-unit * 4;
+$spacing-lg: $spacing-base-unit * 6;
+$spacing-xl: $spacing-base-unit * 8;
+$spacing-xxl: $spacing-base-unit * 12;

@@ -8,13 +8,15 @@
   width: 100%;
   height: 100%;
   z-index: 9999;
-  display: block;
+
   @include mixins.breakpoint(medium) {
     position: absolute;
-    top: var(--popup-top, 0);
-    left: var(--popup-left, 0);
-    width: auto;
-    height: auto;
+    border-radius: 24px;
+    border-width: 1px;
+    top: auto;
+    left: auto;
+    background: none;
+    z-index: 1050;
   }
 }
 
@@ -27,7 +29,6 @@
     height: 100%;
     background-color: rgba(vars.$basic-100, 0.5);
     cursor: pointer;
-    pointer-events: auto;
 
     @include mixins.breakpoint(medium) {
       display: none;
@@ -37,25 +38,20 @@
   &__content {
     position: relative;
     background-color: vars.$basic-white;
-    display: flex;
-    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid #e0d9e0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     width: 100%;
     height: 100%;
-    border-radius: 0;
-    box-shadow: none;
-    overflow-y: auto;
-    pointer-events: auto;
+
     @include mixins.breakpoint(medium) {
       width: 400px;
-      min-width: 400px;
       max-width: 544px;
       height: auto;
-      max-height: none;
       background: vars.$basic-white;
       border: 1px solid vars.$basic-100;
       box-shadow: vars.$shadow-base-default;
       border-radius: vars.$border-radius-xxl;
-      animation: none;
       overflow: hidden;
     }
   }
@@ -67,13 +63,10 @@
     background-color: vars.$secondary-050;
     padding: 16px;
     border-bottom: 1px solid vars.$basic-100;
-    flex-shrink: 0;
+
     @include mixins.breakpoint(medium) {
-      padding: 16px;
       gap: 10px;
       height: 56px;
-      box-sizing: border-box;
-      align-self: stretch;
     }
   }
 
@@ -84,12 +77,10 @@
     line-height: 24px;
     color: vars.$basic-800;
     margin: 0;
+
     @include mixins.breakpoint(medium) {
-      width: auto;
-      height: 24px;
       display: flex;
       align-items: center;
-      flex-grow: 0;
     }
   }
 
@@ -108,6 +99,7 @@
     &:hover {
       color: vars.$brand-purple;
     }
+
     @include mixins.breakpoint(medium) {
       width: 24px;
       height: 24px;
@@ -120,10 +112,6 @@
     overflow-y: auto;
 
     @include mixins.breakpoint(medium) {
-      width: auto;
-      height: auto;
-      align-self: stretch;
-      overflow-y: visible;
       display: flex;
       flex-direction: column;
     }
@@ -132,6 +120,7 @@
       padding: 1.5rem 1rem;
     }
   }
+
   &__item-title-wrapper {
     display: flex;
     align-items: baseline;
@@ -145,16 +134,12 @@
     line-height: 24px;
     color: vars.$brand-purple;
     margin: 0;
-    text-align: left;
-    padding-bottom: 1.5rem;
+    padding-bottom: 24px;
+    text-align: start;
     @include mixins.breakpoint(medium) {
-      width: auto;
-      height: 24px;
-      margin: 0;
       display: flex;
       align-items: center;
       gap: 10px;
-      align-self: stretch;
     }
   }
 
@@ -165,9 +150,8 @@
     line-height: 24px;
     color: vars.$basic-800;
     margin-left: 10px;
+
     @include mixins.breakpoint(medium) {
-      width: auto;
-      height: 24px;
       flex-grow: 1;
       margin-left: 0;
     }
@@ -180,13 +164,6 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    @include mixins.breakpoint(medium) {
-      gap: 16px;
-      width: auto;
-      height: auto;
-      align-self: stretch;
-      margin: 0;
-    }
   }
 
   &__list-item {
@@ -196,12 +173,9 @@
     font-family: vars.$font-primary;
     font-size: 16px;
     line-height: 20px;
-    color: vars.$basic-800;
+
     @include mixins.breakpoint(medium) {
       gap: 8px;
-      width: auto;
-      height: 20px;
-      align-self: stretch;
     }
   }
 
@@ -212,10 +186,6 @@
       font-size: 16px;
       line-height: 20px;
       color: vars.$basic-800;
-      text-align: left;
-      flex-grow: 0;
-      width: auto;
-      height: 20px;
     }
   }
 
@@ -224,49 +194,34 @@
     font-size: 18px;
     line-height: 20px;
     color: vars.$basic-800;
+
     @include mixins.breakpoint(medium) {
       font-family: vars.$font-primary;
       font-weight: vars.$font-weight-bold;
-      font-size: 18px;
-      line-height: 20px;
-      color: vars.$basic-800;
-      flex-grow: 0;
-      width: auto;
-      height: 20px;
-      text-align: right;
     }
   }
 
   &__total {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
     border-top: 1px solid vars.$basic-100;
     padding: 1.563rem 1rem;
     align-items: center;
-    flex-shrink: 0;
+
     @include mixins.breakpoint(medium) {
       padding: 20px 24px;
       gap: 10px;
       height: 64px;
       background: vars.$secondary-050;
-      border-top: 1px solid vars.$basic-100;
-      box-sizing: border-box;
-      align-self: stretch;
       border-radius: 0 0 vars.$border-radius-xxl vars.$border-radius-xxl;
     }
   }
+
   &__final-label {
     font-weight: vars.$font-weight-bold;
     font-size: 18px;
     line-height: 22px;
     color: vars.$basic-800;
-    @include mixins.breakpoint(medium) {
-      width: auto;
-      height: 22px;
-      text-align: left;
-      flex-grow: 0;
-    }
   }
 
   &__final-value {
@@ -274,12 +229,5 @@
     font-size: 22px;
     line-height: 24px;
     color: vars.$basic-800;
-
-    @include mixins.breakpoint(medium) {
-      width: auto;
-      height: 24px;
-      text-align: right;
-      flex-grow: 0;
-    }
   }
 }

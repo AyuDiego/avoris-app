@@ -1,4 +1,54 @@
 @use "./variables" as vars;
+
+// FONTS Mixins
+// -------------------------------------------------------------------- 
+@mixin typography-h1 {
+  font-family: vars.$font-secondary; 
+  font-weight: vars.$font-weight-bold; 
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+ 
+@mixin typography-h2 {
+  font-family: vars.$font-primary;
+  font-weight: vars.$font-weight-bold;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+@mixin typography-h3 {
+  font-family: vars.$font-primary;
+  font-weight: vars.$font-weight-bold;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin typography-body-base {
+  font-family: vars.$font-primary;
+  font-weight: vars.$font-weight-regular;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+@mixin typography-body-bold {
+  @include typography-body-base;
+  font-weight: vars.$font-weight-bold;
+}
+
+@mixin typography-small {
+  font-family: vars.$font-primary;
+  font-weight: vars.$font-weight-regular;
+  font-size: 12px;
+  line-height: 18px;
+}
+@mixin typography-nav-bar {
+  @include typography-body-base; 
+  font-weight: vars.$font-weight-semibold; 
+  line-height: 20px;
+}
+// BREAKPOINTS Mixins
+// --------------------------------------------------------------------
 @mixin respond-to($breakpoint) {
   @if map-has-key($breakpoints, $breakpoint) {
     @media (min-width: map-get($breakpoints, $breakpoint)) {
@@ -30,3 +80,4 @@
     @warn "Breakpoint mixin doesn't recognize `#{$size}`.";
   }
 }
+

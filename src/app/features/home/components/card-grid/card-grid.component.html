@@ -1,33 +1,43 @@
 <section class="c-card-grid">
 
-  
-  <header class="c-card-grid__header">
-    <app-title
-    class="c-card-grid__title"
-    text="Vive tus propias aventuras">
-  </app-title>
-  <p class="c-card-grid__subtitle">
-    Para los que les gusta explorar y conocer mundo sin complejos
-  </p>
-</header>
-
-<div class="c-card-grid__content-wrapper">
-  <app-buttons
-  buttonType="filter"
-  label="Ver filtros"
-  leftIcon="filter"
-  class="c-card-grid__action"
-  (click)="toggleOpen()"
-  >
-</app-buttons>
-
-<div class="c-card-grid__filter-placeholder">
-  <!-- <app-filter-sidebar></app-filter-sidebar> --> <!-- Add your actual component here later -->
-  <p style="border: 1px dashed grey; padding: 1rem; height: 400px;">Filter Sidebar Placeholder</p>
+<div class="c-card-grid__filter-container" [class.is-visible]="isFilterOpen()">
+  <app-filter-modal
+    class="c-card-grid__filter c-card-grid__filter--overlay"
+    [isOpen]="isFilterOpen()" 
+    (closeModal)="closeFilterModal()"
+    (filtersChanged)="updateFilters($event)"
+  ></app-filter-modal>
 </div>
 
+  <header class="c-card-grid__header">
+    <app-title class="c-card-grid__title" text="Vive tus propias aventuras">
+    </app-title>
+    <p class="c-card-grid__subtitle">
+      Para los que les gusta explorar y conocer mundo sin complejos
+    </p>
+  </header>
+
+  <div class="c-card-grid__content-wrapper">
+    <app-buttons
+    #filterButton
+    buttonType="filter"
+    label="Ver filtros"
+    leftIcon="filter"
+    class="c-card-grid__action"
+    (click)="toggleFilter()"
+    >
+    </app-buttons>
+   
+ 
+    <app-filter-modal
+    class="c-card-grid__filter c-card-grid__filter--grid"
+    [isOpen]="isXLScreen()"
+    [hideHeader]="true" 
+    (filtersChanged)="updateFilters($event)"
+  ></app-filter-modal>
+
     <div class="c-card-grid__items">
-      @for (group of cardGroups(); track group.groupTitle) {
+      @for (group of filteredCardGroups(); track group.groupTitle) {
         <div class="c-card-grid__group">
           <h2 class="c-card-grid__group-title">{{ group.groupTitle }}</h2>
           <div class="c-card-grid__items-inner">
@@ -38,14 +48,13 @@
                 (reserveClicked)="onCardReserveClicked(card.title)">
               </app-card>
             } @empty {
-              <p>No hay aventuras disponibles en {{ group.groupTitle }}.</p>
+              <p>No hay aventuras disponibles en {{ group.groupTitle }} que coincidan con los filtros.</p>
             }
           </div>
         </div>
       } @empty {
-         <p class="c-card-grid__empty-all">No hay aventuras disponibles en este momento.</p>
+         <p class="c-card-grid__empty-all">No hay aventuras disponibles que coincidan con los filtros seleccionados.</p>
       }
     </div>
-  </div>  
-
+  </div>
 </section>

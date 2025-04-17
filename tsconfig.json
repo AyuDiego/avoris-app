@@ -25,7 +25,8 @@
     ],
     "paths": { 
     "@avoris/avoris-ui": ["src/app/shared/components/index.ts"], 
-    "@avoris/avoris-ui/*": ["src/app/shared/components/*"]
+    "@avoris/avoris-ui/models": ["src/app/shared/models/index.ts"]
+    
   }
   },
   "angularCompilerOptions": {

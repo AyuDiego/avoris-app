@@ -1,5 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
+
 export type ButtonType = 'btn' | 'slider' | 'filter' | 'accordion-trigger';
 export type ButtonStyle = 'primary' | 'secondary' | 'outline';
 export type ButtonSize = 'sm' | 'base' | 'lg';
@@ -10,7 +11,7 @@ export type SliderDirection = 'prev' | 'next';
   standalone: true,
   imports: [IconComponent],
   templateUrl: './buttons.component.html',
-  styleUrl: './buttons.component.scss',
+  styleUrls: ['./buttons.component.scss', './specialized-buttons.scss'],
 })
 export class ButtonsComponent {
   readonly buttonType = input<ButtonType>('btn');
@@ -24,6 +25,7 @@ export class ButtonsComponent {
   readonly previousClicked = output<void>();
   readonly nextClicked = output<void>();
   readonly toggle = output<void>();
+  
   onSliderClick(): void {
     if (this.sliderDirection() === 'prev') {
       this.previousClicked.emit();

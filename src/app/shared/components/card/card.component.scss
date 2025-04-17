@@ -2,6 +2,7 @@
 @use "styles/abstracts/mixins" as mixins;
 
 :host {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;

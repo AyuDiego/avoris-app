@@ -1,0 +1,189 @@
+@use "abstracts/variables" as vars;
+@use "abstracts/mixins" as mixins;
+@use "sass:map";
+
+:host {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  z-index: vars.$z-index-modal-fullscreen;
+  background: vars.$secondary-050;
+  overflow-y: auto;
+
+  &.is-open {
+    display: block;
+  }
+
+  @include mixins.breakpoint(medium) {
+    position: absolute;
+    top: 0;
+    left: -296px;
+    width: 296px;
+    height: 100%;
+    min-height: 100%;
+    background: vars.$secondary-050;
+    box-shadow: vars.$shadow-base-default;
+    border-right: 1px solid vars.$basic-100;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    transform: translateX(-100%);
+
+    &.is-open {
+      transform: translateX(100%);
+    }
+  }
+
+  @include mixins.breakpoint(xl) {
+    position: static;
+    width: 264px;
+    height: auto;
+    min-height: 896px;
+    background: vars.$secondary-050;
+    border-radius: 24px;
+    z-index: 1000;
+    transform: none;
+    margin: 40px 0;
+    overflow-y: auto;
+    box-shadow: none;
+    border-right: none;
+    &.is-open {
+      transform: none;
+    }
+
+    .c-card-grid__filter-container.is-visible {
+      display: none;
+
+      .c-card-grid__filter--overlay {
+        display: none;
+
+        &.is-open {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.c-filter-modal {
+  &__content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    @include mixins.breakpoint(xl) {
+      height: auto;
+    }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: vars.$spacing-md vars.$spacing-lg;
+    border-bottom: 1px solid vars.$basic-100;
+
+    @include mixins.breakpoint(xl) {
+      justify-content: center;
+    }
+  }
+
+  &__title {
+    @include mixins.typography-h1;
+    margin: 0;
+    color: vars.$basic-800;
+  }
+
+  &__close-btn {
+    background: none;
+    border: none;
+    padding: vars.$spacing-xs;
+    cursor: pointer;
+    color: vars.$basic-800;
+
+    &:hover {
+      color: vars.$primary-700;
+    }
+
+    app-icon {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__body {
+    padding: vars.$spacing-lg;
+    overflow-y: auto;
+    flex-shrink: 1;
+
+    @include mixins.breakpoint(medium) {
+      overflow-y: visible;
+      flex-grow: 0;
+    }
+
+    @include mixins.breakpoint(xl) {
+      overflow: hidden;
+    }
+  }
+
+  &__destination-content {
+    display: flex;
+    padding: 12px 16px;
+  }
+
+  &__adventure-content {
+    display: flex;
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: vars.$spacing-sm;
+  }
+
+  &__show-more {
+    background: none;
+    border: none;
+    color: vars.$brand-purple;
+    cursor: pointer;
+    font-family: vars.$font-primary;
+    font-weight: vars.$font-weight-semibold;
+    font-size: 14px;
+    text-align: left;
+    padding: vars.$spacing-xs 0;
+    margin-top: vars.$spacing-sm;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__price-content {
+    display: flex;
+    flex-direction: column;
+    gap: vars.$spacing-md;
+  }
+}
+
+.c-filter-modal__overlay {
+  display: none;
+
+  :host(.is-open) & {
+    @media (max-width: #{vars.$breakpoint-md - 1px}) {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(vars.$basic-900, 0.5);
+      z-index: vars.$z-index-modal;
+      cursor: pointer;
+    }
+  }
+}
