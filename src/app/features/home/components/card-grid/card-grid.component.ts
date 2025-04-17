@@ -19,16 +19,15 @@ import { FilterCriteria } from '@avoris/avoris-ui/models';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'app-card-grid',
-  standalone: true,
-  imports: [
-    TitleComponent,
-    ButtonsComponent,
-    CardComponent,
-    FilterModalComponent,
-  ],
-  templateUrl: './card-grid.component.html',
-  styleUrl: './card-grid.component.scss',
+    selector: 'app-card-grid',
+    imports: [
+        TitleComponent,
+        ButtonsComponent,
+        CardComponent,
+        FilterModalComponent,
+    ],
+    templateUrl: './card-grid.component.html',
+    styleUrl: './card-grid.component.scss'
 })
 export class CardGridComponent implements OnDestroy {
   @ViewChild('filterButton', { read: ElementRef }) filterButtonRef:

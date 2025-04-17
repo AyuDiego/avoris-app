@@ -5,12 +5,11 @@ import { IconRegistryService } from '../../../core/icon-registry.service';
 import { take } from 'rxjs';
 
 @Component({
-  selector: 'app-icon',
-  standalone: true,
-  imports: [CommonModule],
-  template: `<span [innerHTML]="svgContent()" class="icon-wrapper"></span>`,
-  styleUrls: ['./icon.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-icon',
+    imports: [CommonModule],
+    template: `<span [innerHTML]="svgContent()" class="icon-wrapper"></span>`,
+    styleUrls: ['./icon.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconComponent {
   private iconRegistry = inject(IconRegistryService);

@@ -11,7 +11,7 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { ButtonsComponent, IconComponent } from '@avoris/avoris-ui';
+import { IconComponent } from '@avoris/avoris-ui';
 
 export interface BreakdownItem {
   label: string;
@@ -20,8 +20,7 @@ export interface BreakdownItem {
 
 @Component({
   selector: 'app-price-breakdown-modal',
-  standalone: true,
-  imports: [CommonModule, ButtonsComponent, IconComponent],
+  imports: [CommonModule, IconComponent],
   templateUrl: './price-breakdown-modal.component.html',
   styleUrl: './price-breakdown-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -99,16 +98,18 @@ export class PriceBreakdownModalComponent implements OnDestroy {
     if (!offsetParent) offsetParent = document.body;
 
     const parentRect = offsetParent.getBoundingClientRect();
- 
-    let top = triggerRect.bottom - parentRect.top + 4;  
-    let left = triggerRect.left - parentRect.left;
- 
-    const parentWidth = offsetParent === document.body ? window.innerWidth : offsetParent.offsetWidth;
 
-  
+    let top = triggerRect.bottom - parentRect.top + 4;
+    let left = triggerRect.left - parentRect.left;
+
+    const parentWidth =
+      offsetParent === document.body
+        ? window.innerWidth
+        : offsetParent.offsetWidth;
+
     this.renderer.setStyle(hostElement, 'position', 'absolute');
     this.renderer.setStyle(hostElement, 'top', `${top}px`);
-    this.renderer.setStyle(hostElement, 'left', `${left}px`); 
+    this.renderer.setStyle(hostElement, 'left', `${left}px`);
     this.renderer.setStyle(hostElement, 'transform', 'none');
     this.renderer.setStyle(hostElement, 'z-index', '1050');
   }

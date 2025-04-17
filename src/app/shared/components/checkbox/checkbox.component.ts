@@ -2,11 +2,10 @@ import { Component, input, signal, model } from '@angular/core';
 import { InfoTooltipComponent } from '../info-tooltip/info-tooltip.component';
 
 @Component({
-  selector: 'app-checkbox',
-  standalone: true,
-  imports: [InfoTooltipComponent],
-  templateUrl: './checkbox.component.html',
-  styleUrl: './checkbox.component.scss',
+    selector: 'app-checkbox',
+    imports: [InfoTooltipComponent],
+    templateUrl: './checkbox.component.html',
+    styleUrl: './checkbox.component.scss'
 })
 export class CheckboxComponent {
   readonly label = input<string>('');

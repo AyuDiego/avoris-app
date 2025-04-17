@@ -4,32 +4,27 @@ import {
   ElementRef,
   OnDestroy,
   ViewChild,
+  afterNextRender,
   computed,
   inject,
   input,
   output,
   signal,
-  afterNextRender,
 } from '@angular/core';
 import {
   BreakdownItem,
   ButtonsComponent,
-  IconComponent,
   PriceBreakdownModalComponent,
   TagComponent,
-  TextInputComponent,
 } from '@avoris/avoris-ui';
 import { CardData } from 'src/app/mock-data/cards.mock';
 
 @Component({
   selector: 'app-card',
-  standalone: true,
   imports: [
     CurrencyPipe,
-    IconComponent,
     ButtonsComponent,
     TagComponent,
-    TextInputComponent,
     PriceBreakdownModalComponent,
   ],
   providers: [CurrencyPipe],
@@ -42,13 +37,16 @@ export class CardComponent implements OnDestroy {
   readonly reserveClicked = output<void>();
   readonly isDetailsOpen = signal(false);
 
-  @ViewChild('detailsBtnRef') detailsButtonRef: ElementRef<HTMLElement> | undefined;
+  @ViewChild('detailsBtnRef') detailsButtonRef:
+    | ElementRef<HTMLElement>
+    | undefined;
 
   readonly triggerElementRef = signal<HTMLElement | null>(null);
   readonly isTablet = signal(window.matchMedia('(min-width: 744px)').matches);
 
   private readonly _mql = window.matchMedia('(min-width: 744px)');
-  private readonly _mqlListener = (e: MediaQueryListEvent) => this.isTablet.set(e.matches);
+  private readonly _mqlListener = (e: MediaQueryListEvent) =>
+    this.isTablet.set(e.matches);
 
   readonly breakdownItems = computed<BreakdownItem[]>(() => {
     const cardData = this.data();
@@ -67,7 +65,15 @@ export class CardComponent implements OnDestroy {
     if (cardData.priceDetails?.final) {
       return cardData.priceDetails.final;
     }
-    return this.currencyPipe.transform(cardData.price, 'EUR', 'symbol', '1.2-2', 'es-ES') ?? 'N/A';
+    return (
+      this.currencyPipe.transform(
+        cardData.price,
+        'EUR',
+        'symbol',
+        '1.2-2',
+        'es-ES'
+      ) ?? 'N/A'
+    );
   });
 
   private readonly currencyPipe = inject(CurrencyPipe);

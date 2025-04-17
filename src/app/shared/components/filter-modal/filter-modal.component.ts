@@ -25,17 +25,16 @@ const BREAKPOINTS = {
 };
 
 @Component({
-  selector: 'app-filter-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    IconComponent,
-    TextInputComponent,
-    CheckboxComponent,
-  ],
-  templateUrl: './filter-modal.component.html',
-  styleUrls: ['./filter-modal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-filter-modal',
+    imports: [
+        CommonModule,
+        IconComponent,
+        TextInputComponent,
+        CheckboxComponent,
+    ],
+    templateUrl: './filter-modal.component.html',
+    styleUrls: ['./filter-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterModalComponent implements OnDestroy {
   readonly isOpen = input.required<boolean>();

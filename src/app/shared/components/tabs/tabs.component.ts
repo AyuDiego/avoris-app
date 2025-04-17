@@ -3,11 +3,10 @@ import { IconComponent } from '@avoris/avoris-ui';
 import { TABS, Tab } from 'src/app/mock-data/tabs.mock';
 
 @Component({
-  selector: 'app-tabs',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './tabs.component.html',
-  styleUrl: './tabs.component.scss'
+    selector: 'app-tabs',
+    imports: [IconComponent],
+    templateUrl: './tabs.component.html',
+    styleUrl: './tabs.component.scss'
 })
 export class TabsComponent {
   readonly tabs = input<Tab[]>(TABS);

@@ -5,11 +5,10 @@ export type TextInputType = 'filter-input-text' | 'nav-tab-main' | 'icon-input';
 export type TextInputSize = 'sm' | 'md' | 'lg';
 
 @Component({
-  selector: 'app-text-input',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './text-input.component.html',
-  styleUrl: './text-input.component.scss',
+    selector: 'app-text-input',
+    imports: [IconComponent],
+    templateUrl: './text-input.component.html',
+    styleUrl: './text-input.component.scss'
 })
 export class TextInputComponent {
   readonly type = input<TextInputType>('filter-input-text');

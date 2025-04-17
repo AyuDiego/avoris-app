@@ -7,11 +7,10 @@ export type ButtonSize = 'sm' | 'base' | 'lg';
 export type SliderDirection = 'prev' | 'next';
 
 @Component({
-  selector: 'app-buttons',
-  standalone: true,
-  imports: [IconComponent],
-  templateUrl: './buttons.component.html',
-  styleUrls: ['./buttons.component.scss', './specialized-buttons.scss'],
+    selector: 'app-buttons',
+    imports: [IconComponent],
+    templateUrl: './buttons.component.html',
+    styleUrls: ['./buttons.component.scss', './specialized-buttons.scss']
 })
 export class ButtonsComponent {
   readonly buttonType = input<ButtonType>('btn');

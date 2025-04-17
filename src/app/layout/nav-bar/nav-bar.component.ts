@@ -3,12 +3,10 @@ import { TabsComponent, ButtonsComponent, IconComponent } from '@avoris/avoris-u
 
 import {TABS  } from 'src/app/mock-data/tabs.mock';
 @Component({
-  selector: 'app-nav-bar',
-  standalone: true,
-  imports: [TabsComponent, ButtonsComponent, IconComponent],  
-
-  templateUrl: './nav-bar.component.html',
-  styleUrl: './nav-bar.component.scss'
+    selector: 'app-nav-bar',
+    imports: [TabsComponent, ButtonsComponent, IconComponent],
+    templateUrl: './nav-bar.component.html',
+    styleUrl: './nav-bar.component.scss'
 })
 export class NavBarComponent {
   TABS = TABS;
