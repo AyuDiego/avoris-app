@@ -2,6 +2,32 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.0.
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+- Docker (for containerization)
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+### Running the application locally
+
+Start the development server:
+
+```bash
+npm start
+```
+
+Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
@@ -22,16 +48,40 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+## Docker Implementation
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Building the Docker image
 
-Comandos Docker:
+```bash
+docker build -t avoris-app .
+```
 
-Build
+### Running the Docker container
 
- docker build -t avoris-app .
-
-Run
-
+```bash
 docker run -p 8080:80 avoris-app
+```
+
+After running the container, access the application at `http://localhost:8080`.
+
+## Best Practices
+
+- Keep components small and focused on a single responsibility
+- Use services for data fetching and business logic
+- Implement lazy loading for large applications
+- Follow Angular style guide for naming conventions and project structure
+- Write unit tests for critical functionality
+- Use environment files for environment-specific configuration
+- Implement proper error handling and loading states
+- Use Angular's built-in security features to prevent common vulnerabilities
+
+## Project Structure
+    src/
+    ├── app/
+    │   ├── core/       # Singleton services, app-level components
+    │   ├── features/   # Feature modules
+    │   ├── shared/     # Shared components, directives, pipes
+    │   └── app.module.ts
+    ├── assets/
+    ├── environments/
+    └── index.html
