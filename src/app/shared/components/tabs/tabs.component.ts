@@ -1,6 +1,6 @@
-import { Component, input, signal } from '@angular/core';
-import { IconComponent } from '@avoris/avoris-ui';
+import { Component, input, signal } from '@angular/core'; 
 import { TABS, Tab } from 'src/app/mock-data/tabs.mock';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
     selector: 'app-tabs',

@@ -11,13 +11,14 @@ import {
   output,
   signal,
 } from '@angular/core';
+
+import { CardData } from 'src/app/mock-data/cards.mock';
+import { ButtonsComponent } from '../buttons/buttons.component';
 import {
   BreakdownItem,
-  ButtonsComponent,
   PriceBreakdownModalComponent,
-  TagComponent,
-} from '@avoris/avoris-ui';
-import { CardData } from 'src/app/mock-data/cards.mock';
+} from '../price-breakdown-modal/price-breakdown-modal.component';
+import { TagComponent } from '../tag/tag.component';
 
 @Component({
   selector: 'app-card',

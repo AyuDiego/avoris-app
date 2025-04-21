@@ -3,12 +3,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
-    "types": [
-      "jasmine"
-    ]
+    "types": ["jasmine"],
+
+    "paths": {
+      "@avoris/avoris-ui": ["src/app/shared/components/index.ts"],
+      "@avoris/avoris-ui/models": ["src/app/shared/models/index.ts"]
+    }
   },
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

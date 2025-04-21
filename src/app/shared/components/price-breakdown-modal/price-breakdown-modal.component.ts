@@ -10,8 +10,8 @@ import {
   output,
   Renderer2,
   signal,
-} from '@angular/core';
-import { IconComponent } from '@avoris/avoris-ui';
+} from '@angular/core'; 
+import { IconComponent } from '../icon/icon.component';
 
 export interface BreakdownItem {
   label: string;

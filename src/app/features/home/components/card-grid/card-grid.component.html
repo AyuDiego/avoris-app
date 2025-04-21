@@ -41,7 +41,7 @@
         <div class="c-card-grid__group">
           <h2 class="c-card-grid__group-title">{{ group.groupTitle }}</h2>
           <div class="c-card-grid__items-inner">
-            @for (card of group.cards; track card.title) {
+            @for (card of group.cards; track $index) {
               <app-card
                 [data]="card"
                 (detailsClicked)="onCardDetailsClicked(card.title)"

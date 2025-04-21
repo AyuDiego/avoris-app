@@ -11,14 +11,12 @@ import {
   signal,
   computed,
   effect,
-} from '@angular/core';
-import {
-  IconComponent,
-  TextInputComponent,
-  CheckboxComponent,
-} from '@avoris/avoris-ui';
+} from '@angular/core'; 
 import { FilterCriteria } from '../../models/filter-criteria.model';
 import { ALL_TAG_FILTERS, INITIAL_VISIBLE_COUNT, TagFilter } from 'src/app/mock-data/filters.mock';
+import { CheckboxComponent } from '../checkbox/checkbox.component';
+import { IconComponent } from '../icon/icon.component';
+import { TextInputComponent } from '../text-input/text-input.component';
 
 const BREAKPOINTS = {
   XL: 1440,
@@ -97,7 +95,7 @@ export class FilterModalComponent implements OnDestroy {
 
     effect(() => {
       this.filtersChanged.emit(this.activeFilters());
-    }, { allowSignalWrites: true });
+    });
 
     effect(() => {
       const shouldBeOpen = this.isOpen();
