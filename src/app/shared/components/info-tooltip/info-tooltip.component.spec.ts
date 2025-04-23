@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { InfoTooltipComponent } from './info-tooltip.component';
 import { IconComponent } from '../icon/icon.component';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IconRegistryService } from '../../../core/icon-registry.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'; 
 import { of } from 'rxjs';
+import { IconRegistryService } from 'src/app/core/services/icon-registry.service';
 
 const mockSvgContent = '<svg><path d="M10 10"></path></svg>';
 

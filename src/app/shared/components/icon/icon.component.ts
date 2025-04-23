@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { take } from 'rxjs';
-import { IconRegistryService } from '../../../core/icon-registry.service';
+import { IconRegistryService } from 'src/app/core/services/icon-registry.service';
 
 @Component({
   selector: 'app-icon',

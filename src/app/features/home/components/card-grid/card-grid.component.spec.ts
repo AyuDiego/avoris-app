@@ -1,41 +1,80 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { CardGridComponent } from './card-grid.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { FilterService } from 'src/app/core/services/filter.service';
 import { CARD_GROUPS } from 'src/app/mock-data/cards.mock';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { CardGridComponent } from './card-grid.component';
 
 describe('CardGridComponent', () => {
   let component: CardGridComponent;
   let fixture: ComponentFixture<CardGridComponent>;
+  let filterService: FilterService;
+  let mockMediaQueryList: {
+    matches: boolean;
+    addEventListener: jasmine.Spy;
+    removeEventListener: jasmine.Spy;
+  };
+  let mediaQueryListeners: ((e: MediaQueryListEvent) => void)[] = [];
 
   beforeEach(async () => {
+    mockMediaQueryList = {
+      matches: false,
+      addEventListener: jasmine
+        .createSpy('addEventListener')
+        .and.callFake(
+          (type: string, listener: (e: MediaQueryListEvent) => void) => {
+            if (type === 'change') mediaQueryListeners.push(listener);
+          }
+        ),
+      removeEventListener: jasmine
+        .createSpy('removeEventListener')
+        .and.callFake(
+          (type: string, listener: (e: MediaQueryListEvent) => void) => {
+            if (type === 'change') {
+              mediaQueryListeners = mediaQueryListeners.filter(
+                (l) => l !== listener
+              );
+            }
+          }
+        ),
+    };
+
+    spyOn(window, 'matchMedia').and.returnValue(mockMediaQueryList as any);
+
     await TestBed.configureTestingModule({
-      imports: [CardGridComponent],
-      providers: [provideHttpClient(withFetch())],
+      imports: [CardGridComponent, NoopAnimationsModule],
+      providers: [
+        provideHttpClient(withFetch()),
+        FilterService,
+        { provide: PLATFORM_ID, useValue: 'browser' },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CardGridComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    filterService = TestBed.inject(FilterService);
   });
-
   it('should create', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should initialize with default values', () => {
+    fixture.detectChanges();
     expect(component.isFilterOpen()).toBeFalse();
-    expect(component.filterTriggerElement()).toBeNull();
+    expect(component.filterTriggerElement()).toBeFalsy();
     expect(component.allCardGroups()).toEqual(CARD_GROUPS);
-    const filters = component.currentFilters();
-    expect(filters.tags).toEqual([]);
-    expect(filters.minPrice).toBeUndefined();
-    expect(filters.maxPrice).toBeUndefined();
+    const initialServiceFilters = filterService.activeFilters();
+    expect(initialServiceFilters.tags).toEqual([]);
+    expect(initialServiceFilters.minPrice).toBeUndefined();
+    expect(initialServiceFilters.maxPrice).toBeUndefined();
     expect(component.isXLScreen()).toBeFalse();
   });
 
   it('should toggle filter modal', () => {
+    fixture.detectChanges();
     expect(component.isFilterOpen()).toBeFalse();
     component.toggleFilter();
     expect(component.isFilterOpen()).toBeTrue();
@@ -44,27 +83,22 @@ describe('CardGridComponent', () => {
   });
 
   it('should close filter modal', () => {
+    fixture.detectChanges();
     component.isFilterOpen.set(true);
     expect(component.isFilterOpen()).toBeTrue();
     component.closeFilterModal();
     expect(component.isFilterOpen()).toBeFalse();
   });
 
-  it('should update filters', () => {
-    const newFilters = {
-      tags: ['Quads', 'Trekking'],
-      minPrice: 100,
-      maxPrice: 500,
-    };
-    component.updateFilters(newFilters);
-    expect(component.currentFilters()).toEqual(newFilters);
-  });
-
-  it('should filter card groups based on criteria', () => {
+  it('should filter card groups based on criteria from service', () => {
+    fixture.detectChanges();
     expect(component.filteredCardGroups().length).toEqual(
       component.allCardGroups().length
     );
-    component.updateFilters({ tags: ['Quads'] });
+
+    filterService.updateTag('Quads', true);
+    fixture.detectChanges();
+
     expect(component.filteredCardGroups().length).toBeGreaterThan(0);
     const filteredGroups = component.filteredCardGroups();
     filteredGroups.forEach((group) => {
@@ -74,8 +108,12 @@ describe('CardGridComponent', () => {
     });
   });
 
-  it('should filter cards by price range', () => {
-    component.updateFilters({ tags: [], minPrice: 1000, maxPrice: 1500 });
+  it('should filter cards by price range from service', () => {
+    fixture.detectChanges();
+    filterService.updateMinPrice('1000');
+    filterService.updateMaxPrice('1500');
+    fixture.detectChanges();
+
     const filteredGroups = component.filteredCardGroups();
     filteredGroups.forEach((group) => {
       group.cards.forEach((card) => {
@@ -84,13 +122,13 @@ describe('CardGridComponent', () => {
       });
     });
   });
+  it('should combine tag and price filters from service', () => {
+    fixture.detectChanges();
+    filterService.updateTag('Quads', true);
+    filterService.updateMinPrice('1000');
+    filterService.updateMaxPrice('1500');
+    fixture.detectChanges();
 
-  it('should combine tag and price filters', () => {
-    component.updateFilters({
-      tags: ['Quads'],
-      minPrice: 1000,
-      maxPrice: 1500,
-    });
     const filteredGroups = component.filteredCardGroups();
     filteredGroups.forEach((group) => {
       group.cards.forEach((card) => {
@@ -100,7 +138,6 @@ describe('CardGridComponent', () => {
       });
     });
   });
-
   it('should emit events when card buttons are clicked', () => {
     spyOn(component, 'onCardDetailsClicked');
     spyOn(component, 'onCardReserveClicked');
@@ -108,30 +145,26 @@ describe('CardGridComponent', () => {
     const cardElements = fixture.debugElement.queryAll(By.css('app-card'));
     if (cardElements.length > 0) {
       const firstCard = cardElements[0].componentInstance;
-      const cardTitle = component.allCardGroups()[0].cards[0].title;
-      firstCard.detailsClicked.emit();
-      expect(component.onCardDetailsClicked).toHaveBeenCalledWith(cardTitle);
-      firstCard.reserveClicked.emit();
-      expect(component.onCardReserveClicked).toHaveBeenCalledWith(cardTitle);
+      const cardData = component.filteredCardGroups()[0]?.cards[0];
+      if (cardData) {
+        firstCard.detailsClicked.emit();
+        expect(component.onCardDetailsClicked).toHaveBeenCalledWith(
+          cardData.title
+        );
+        firstCard.reserveClicked.emit();
+        expect(component.onCardReserveClicked).toHaveBeenCalledWith(
+          cardData.title
+        );
+      } else {
+        fail('Could not find card data for the first card element.');
+      }
+    } else {
+      console.warn('No app-card elements found to test button clicks.');
     }
   });
 
-  it('should clean up media query listeners on component destruction', () => {
-    const removeEventListenerSpy = jasmine.createSpy('removeEventListener');
-    const mockMediaQueryList = {
-      matches: false,
-      addEventListener: jasmine.createSpy('addEventListener'),
-      removeEventListener: removeEventListenerSpy,
-    } as any;
-    spyOn(window, 'matchMedia').and.returnValue(mockMediaQueryList);
-    const newFixture = TestBed.createComponent(CardGridComponent);
-    const newComponent = newFixture.componentInstance;
-    newFixture.detectChanges();
-    newComponent.ngOnDestroy();
-    expect(removeEventListenerSpy).toHaveBeenCalled();
-  });
-
   it('should show title and subtitle', () => {
+    fixture.detectChanges();
     const titleElement = fixture.debugElement.query(
       By.css('.c-card-grid__title')
     );
@@ -145,12 +178,41 @@ describe('CardGridComponent', () => {
     );
   });
 
-  it('should have filter button with correct attributes', () => {
+  it('should have filter button that toggles filter modal', () => {
+    fixture.detectChanges();
     const filterButton = fixture.debugElement.query(
       By.css('.c-card-grid__action')
     );
     expect(filterButton).toBeTruthy();
+    spyOn(component, 'toggleFilter').and.callThrough();
     filterButton.triggerEventHandler('click', null);
+    expect(component.toggleFilter).toHaveBeenCalled();
     expect(component.isFilterOpen()).toBeTrue();
+  });
+
+  it('should call empty event handlers without error', () => {
+    fixture.detectChanges();
+    expect(() => component.onCardDetailsClicked('Test Title')).not.toThrow();
+    expect(() => component.onCardReserveClicked('Test Title')).not.toThrow();
+    expect(() => component.onClearSearch()).not.toThrow();
+    expect(() => component.onSearchChange('test value')).not.toThrow();
+  });
+
+  it('should update isXLScreen signal based on media query matching', () => {
+    mockMediaQueryList.matches = true;
+
+    fixture = TestBed.createComponent(CardGridComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    expect(component.isXLScreen()).toBeTrue();
+
+    mockMediaQueryList.matches = false;
+    mediaQueryListeners.forEach((listener) => {
+      listener({ matches: false } as MediaQueryListEvent);
+    });
+
+    fixture.detectChanges();
+    expect(component.isXLScreen()).toBeFalse();
   });
 });

@@ -1,10 +1,9 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { IconComponent } from './icon.component';
-import { IconRegistryService } from '../../../core/icon-registry.service';
+import { By, DomSanitizer } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { IconRegistryService } from 'src/app/core/services/icon-registry.service';
+import { IconComponent } from './icon.component';
 
 const mockSvgContent = '<svg><path d="M10 10"></path></svg>';
 
@@ -17,8 +16,8 @@ describe('IconComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IconComponent, HttpClientTestingModule],
-      providers: [IconRegistryService],
+      imports: [IconComponent],
+      providers: [IconRegistryService, provideHttpClient(withFetch())],
     }).compileComponents();
 
     iconRegistryService = TestBed.inject(IconRegistryService);

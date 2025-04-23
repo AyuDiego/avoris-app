@@ -23,7 +23,7 @@
       <div class="c-card__price-info">
         <span class="c-card__price-label">{{ data().priceLabel }}</span>
         <div class="c-card__price-value">
-          {{ data().price | currency:'EUR':'symbol':'1.2-2':'es-ES' }}
+          {{ data().price | currency : "EUR" : "symbol" : "1.2-2" : "es-ES" }}
         </div>
       </div>
       <span #detailsBtnRef>
@@ -47,14 +47,14 @@
   </div>
 
   @if (isDetailsOpen()) {
-    <app-price-breakdown-modal
-      [triggerElement]="triggerElementRef()" 
-      [title]="data().location"
-      [duration]="data().duration"
-      [items]="breakdownItems()"
-      [finalPrice]="finalPriceValue()"
-      [finalPriceLabel]="'Total'"
-      (closeModal)="toggleDetails()"
-    ></app-price-breakdown-modal>
+  <app-price-breakdown-modal
+    [triggerElement]="triggerElementRef()"
+    [title]="data().location"
+    [duration]="data().duration"
+    [items]="breakdownItems()"
+    [finalPrice]="finalPriceValue()"
+    [finalPriceLabel]="'Total'"
+    (closeModal)="toggleDetails()"
+  ></app-price-breakdown-modal>
   }
 </article>

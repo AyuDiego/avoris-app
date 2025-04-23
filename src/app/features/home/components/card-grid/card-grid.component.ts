@@ -1,12 +1,14 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
+  afterNextRender,
   Component,
-  ElementRef,
-  ViewChild,
   computed,
-  signal,
+  ElementRef,
   inject,
-  PLATFORM_ID,
   OnDestroy,
+  PLATFORM_ID,
+  signal,
+  viewChild,
 } from '@angular/core';
 import {
   ButtonsComponent,
@@ -14,64 +16,36 @@ import {
   FilterModalComponent,
   TitleComponent,
 } from '@avoris/avoris-ui';
+import { FilterService } from 'src/app/core/services/filter.service';
 import { CARD_GROUPS, CardGroup } from 'src/app/mock-data/cards.mock';
-import { FilterCriteria } from '@avoris/avoris-ui/models';
-import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-    selector: 'app-card-grid',
-    imports: [
-        TitleComponent,
-        ButtonsComponent,
-        CardComponent,
-        FilterModalComponent,
-    ],
-    templateUrl: './card-grid.component.html',
-    styleUrl: './card-grid.component.scss'
+  selector: 'app-card-grid',
+  imports: [
+    TitleComponent,
+    ButtonsComponent,
+    CardComponent,
+    FilterModalComponent,
+  ],
+  templateUrl: './card-grid.component.html',
+  styleUrl: './card-grid.component.scss',
 })
 export class CardGridComponent implements OnDestroy {
-  @ViewChild('filterButton', { read: ElementRef }) filterButtonRef:
-    | ElementRef<HTMLElement>
-    | undefined;
+  readonly filterButtonRef =
+    viewChild.required<ElementRef<HTMLElement>>('filterButton');
 
   readonly isFilterOpen = signal(false);
   readonly filterTriggerElement = signal<HTMLElement | null>(null);
   readonly allCardGroups = signal<CardGroup[]>(CARD_GROUPS);
-  readonly currentFilters = signal<FilterCriteria>({ tags: [] });
   readonly isSidebarMode = signal(false);
   readonly isXLScreen = signal(false);
 
-  private readonly platformId = inject(PLATFORM_ID);
   private mediaQueryListener: (() => void) | null = null;
+  private readonly filterService = inject(FilterService);
+  private readonly platformId = inject(PLATFORM_ID);
 
   readonly filteredCardGroups = computed<CardGroup[]>(() => {
-    const groups = this.allCardGroups();
-    const filters = this.currentFilters();
-    const noTagsSelected = filters.tags.length === 0;
-    const hasMinPrice =
-      typeof filters.minPrice === 'number' && !isNaN(filters.minPrice);
-    const hasMaxPrice =
-      typeof filters.maxPrice === 'number' && !isNaN(filters.maxPrice);
-
-    if (noTagsSelected && !hasMinPrice && !hasMaxPrice) {
-      return groups;
-    }
-
-    return groups
-      .map((group) => ({
-        ...group,
-        cards: group.cards.filter((card) => {
-          const matchesTag =
-            noTagsSelected ||
-            (card.tagText && filters.tags.includes(card.tagText));
-          const cardPrice = card.price;
-          const matchesPrice =
-            (!hasMinPrice || cardPrice >= filters.minPrice!) &&
-            (!hasMaxPrice || cardPrice <= filters.maxPrice!);
-          return matchesTag && matchesPrice;
-        }),
-      }))
-      .filter((group) => group.cards.length > 0);
+    return this.filterService.filterCardGroups(this.allCardGroups());
   });
 
   constructor() {
@@ -86,9 +60,9 @@ export class CardGridComponent implements OnDestroy {
       this.mediaQueryListener = () =>
         xlMediaQuery.removeEventListener('change', mediaHandler);
     }
-    if (this.filterButtonRef) {
-      this.filterTriggerElement.set(this.filterButtonRef.nativeElement);
-    }
+    afterNextRender(() => {
+      this.filterTriggerElement.set(this.filterButtonRef().nativeElement);
+    });
   }
 
   ngOnDestroy(): void {
@@ -103,10 +77,6 @@ export class CardGridComponent implements OnDestroy {
 
   closeFilterModal(): void {
     this.isFilterOpen.set(false);
-  }
-
-  updateFilters(newFilters: FilterCriteria): void {
-    this.currentFilters.set(newFilters);
   }
 
   onCardDetailsClicked(cardTitle: string): void {}

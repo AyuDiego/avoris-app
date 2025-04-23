@@ -9,7 +9,7 @@
     >
       <app-icon name="close"></app-icon>
     </button>
-  }
+    }
   </header>
 
   <section class="c-filter-modal__body">
@@ -39,8 +39,8 @@
       @for (filter of visibleAdventureFilters(); track filter.key) {
       <app-checkbox
         [label]="filter.label"
-        [checked]="checkedTags().get(filter.key) ?? false"
-        (checkedChange)="onTagCheckedChange($event, filter.key)"
+        [checked]="filterService.checkedTags().get(filter.key) ?? false"
+        (checkedChange)="filterService.updateTag(filter.key, $event)"
         [tooltip]="'Filtra por ' + filter.label"
       ></app-checkbox>
       } @if (hiddenAdventureFiltersCount() > 0) {
@@ -58,20 +58,20 @@
       }
     </div>
     }
-    <!-- Alojamiento --> 
+    <!-- Alojamiento -->
     <app-text-input
-    type="nav-tab-main"
-    leftIcon="house"
-    title="Alojamiento"
-    [chevronDown]="isAccommodationOpen()"
-    (chevronClicked)="toggleAccommodation()"
-  ></app-text-input>
-  @if (isAccommodationOpen()) {
-  <div class="c-filter-modal__accommodation-content">
-    <p>Alojamiento content area...</p>
-  </div>
-  }
-     <!-- Precio -->
+      type="nav-tab-main"
+      leftIcon="house"
+      title="Alojamiento"
+      [chevronDown]="isAccommodationOpen()"
+      (chevronClicked)="toggleAccommodation()"
+    ></app-text-input>
+    @if (isAccommodationOpen()) {
+    <div class="c-filter-modal__accommodation-content">
+      <p>Alojamiento content area...</p>
+    </div>
+    }
+    <!-- Precio -->
     <app-text-input
       type="nav-tab-main"
       leftIcon="tag"
@@ -84,19 +84,19 @@
       <app-text-input
         type="icon-input"
         leftIcon="tag"
-        [inputValue]="minPrice()"
-        (inputValueChange)="onMinPriceChange($event)"
+        [inputValue]="filterService.minPrice()"
+        (inputValueChange)="filterService.updateMinPrice($event)"
         [placeholder]="'Mínimo'"
-        [value]="minPrice()"
+        [value]="filterService.minPrice()"
         [disabled]="false"
       ></app-text-input>
       <app-text-input
         type="icon-input"
         leftIcon="tag"
-        [inputValue]="maxPrice()"
-        (inputValueChange)="onMaxPriceChange($event)"
+        [inputValue]="filterService.maxPrice()"
+        (inputValueChange)="filterService.updateMaxPrice($event)"
         [placeholder]="'Máximo'"
-        [value]="maxPrice()"
+        [value]="filterService.maxPrice()"
         [disabled]="false"
       ></app-text-input>
     </div>

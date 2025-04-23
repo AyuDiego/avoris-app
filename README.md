@@ -92,6 +92,12 @@ Ejecuta `ng build` para compilar el proyecto. Los artefactos de compilación se 
 
 Ejecuta `npm test` para ejecutar las pruebas unitarias a través de [Karma/Jasmine]
 
+## Para realizar el coverage de las pruebas unitarias, ejecuta:
+
+```bash
+npm run test-coverage
+```
+
 ## Ejecutar pruebas de extremo a extremo
 
 Ejecuta `ng e2e` para ejecutar las pruebas de extremo a extremo a través de una plataforma de tu elección. Para usar este comando, primero necesitas añadir un paquete que implemente capacidades de pruebas de extremo a extremo.

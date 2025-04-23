@@ -157,14 +157,14 @@
   }
 
   &__details-link {
-    order: 1;  
-    align-self: flex-end; 
+    order: 1;
+    align-self: flex-end;
   }
 
   &__reserve-button {
     flex-shrink: 0;
     width: 100%;
-    order: 3; 
+    order: 3;
   }
 
   @include mixins.breakpoint(medium) {

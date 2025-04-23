@@ -1,11 +1,10 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, DomSanitizer } from '@angular/platform-browser';
+import { of } from 'rxjs';
+import { IconRegistryService } from 'src/app/core/services/icon-registry.service';
 import { IconComponent } from '../icon/icon.component';
 import { TextInputComponent, TextInputType } from './text-input.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IconRegistryService } from '../../../core/icon-registry.service';
-import { of } from 'rxjs';
 
 const mockSvgContent = '<svg><path d="M10 10"></path></svg>';
 

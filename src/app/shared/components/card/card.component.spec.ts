@@ -130,4 +130,108 @@ describe('CardComponent', () => {
       expect(compiled.querySelector('.c-card__tag')).toBeNull();
     }
   });
+
+  it('should create breakdown items from card data', () => {
+    const items = component.breakdownItems();
+    expect(items.length).toBe(3);
+    expect(items[0].label).toBe('Precio antes de impuestos');
+    expect(items[0].value).toBe(mockCardData.priceDetails!.beforeTax);
+    expect(items[1].label).toBe('Impuesto');
+    expect(items[1].value).toBe(mockCardData.priceDetails!.tax);
+    expect(items[2].label).toBe('Lorem ipsum');
+    expect(items[2].value).toBe(mockCardData.priceDetails!.other);
+  });
+
+  it('should set "N/A" for missing breakdown item values', () => {
+    const cardWithMissingDetails: CardData = {
+      ...mockCardData,
+      priceDetails: {
+        beforeTax: undefined as any,
+        tax: undefined as any,
+        other: undefined as any,
+        final: undefined as any,
+      },
+    };
+
+    fixture.componentRef.setInput('data', cardWithMissingDetails);
+    fixture.detectChanges();
+
+    const items = component.breakdownItems();
+    expect(items[0].value).toBe('N/A');
+    expect(items[1].value).toBe('N/A');
+    expect(items[2].value).toBe('N/A');
+  });
+
+  it('should use priceDetails.final when available', () => {
+    expect(component.finalPriceValue()).toBe(mockCardData.priceDetails!.final);
+  });
+
+  it('should format price with CurrencyPipe when final price is not available', () => {
+    const cardWithoutFinalPrice: CardData = {
+      ...mockCardData,
+      price: 1234.56,
+      priceDetails: {
+        ...mockCardData.priceDetails!,
+        final: undefined as any,
+      },
+    };
+
+    fixture.componentRef.setInput('data', cardWithoutFinalPrice);
+    fixture.detectChanges();
+
+    expect(component.finalPriceValue()).toContain('1.234,56');
+    expect(component.finalPriceValue()).toContain('€');
+  });
+
+  it('should emit detailsClicked when onDetailsClick is called', () => {
+    spyOn(component.detailsClicked, 'emit');
+    component.onDetailsClick();
+    expect(component.detailsClicked.emit).toHaveBeenCalled();
+  });
+
+  it('should emit reserveClicked when onReserveClick is called', () => {
+    spyOn(component.reserveClicked, 'emit');
+    component.onReserveClick();
+    expect(component.reserveClicked.emit).toHaveBeenCalled();
+  });
+
+  it('should toggle isDetailsOpen state when called without event', () => {
+    expect(component.isDetailsOpen()).toBeFalse();
+    component.toggleDetails();
+    expect(component.isDetailsOpen()).toBeTrue();
+    component.toggleDetails();
+    expect(component.isDetailsOpen()).toBeFalse();
+  });
+
+  it('should close modal when called with event from same trigger element that opened it', () => {
+    component.isDetailsOpen.set(true);
+
+    const mockElement = document.createElement('button');
+    const mockEvent = { target: mockElement } as unknown as Event;
+
+    (component as any).currentTriggerElement = mockElement;
+
+    component.toggleDetails(mockEvent);
+
+    expect(component.isDetailsOpen()).toBeFalse();
+  });
+
+  it('should update currentTriggerElement and open modal when called with new event', () => {
+    const mockElement = document.createElement('button');
+    const mockEvent = { target: mockElement } as unknown as Event;
+
+    component.toggleDetails(mockEvent);
+
+    expect(component.isDetailsOpen()).toBeTrue();
+    expect((component as any).currentTriggerElement).toBe(mockElement);
+  });
+
+  it('should ignore non-HTMLElement event targets', () => {
+    const mockEvent = { target: {} } as unknown as Event;
+
+    component.toggleDetails(mockEvent);
+
+    expect(component.isDetailsOpen()).toBeTrue();
+    expect((component as any).currentTriggerElement).toBeNull();
+  });
 });

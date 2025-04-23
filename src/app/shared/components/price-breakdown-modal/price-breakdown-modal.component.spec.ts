@@ -1,13 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import {
-  PriceBreakdownModalComponent,
-  BreakdownItem,
-} from './price-breakdown-modal.component';
-import { IconComponent } from '../icon/icon.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { DOCUMENT } from '@angular/common';
+  ComponentFixture,
+  TestBed,
+  fakeAsync,
+  tick,
+} from '@angular/core/testing';
 
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { By } from '@angular/platform-browser';
+import { PositionService } from 'src/app/core/services/position.service';
+import {
+  BreakdownItem,
+  PriceBreakdownModalComponent,
+} from './price-breakdown-modal.component';
 describe('PriceBreakdownModalComponent', () => {
   let component: PriceBreakdownModalComponent;
   let fixture: ComponentFixture<PriceBreakdownModalComponent>;
@@ -27,8 +31,6 @@ describe('PriceBreakdownModalComponent', () => {
 
     fixture = TestBed.createComponent(PriceBreakdownModalComponent);
     component = fixture.componentInstance;
-
-    mockDocument = TestBed.inject(DOCUMENT);
 
     fixture.componentRef.setInput('title', 'Test Location');
     fixture.componentRef.setInput('duration', '7 días');
@@ -158,44 +160,197 @@ describe('PriceBreakdownModalComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should position itself relative to the trigger element', () => {
-    const mockTriggerEl = document.createElement('button');
-    mockTriggerEl.getBoundingClientRect = () => ({
-      bottom: 100,
-      left: 50,
-      width: 100,
-      height: 30,
-      right: 150,
-      top: 70,
-      x: 50,
-      y: 70,
-      toJSON: () => {},
-    });
+  it('should position itself relative to the trigger element in popup mode', fakeAsync(() => {
+    spyOn(window, 'matchMedia').and.returnValue({
+      matches: true,
+      addEventListener: jasmine.createSpy(),
+      removeEventListener: jasmine.createSpy(),
+    } as any);
 
-    document.body.appendChild(mockTriggerEl);
+    fixture = TestBed.createComponent(PriceBreakdownModalComponent);
+    component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('title', 'Test Location');
+    fixture.componentRef.setInput('duration', '7 días');
+    fixture.componentRef.setInput('items', mockBreakdownItems);
+    fixture.componentRef.setInput('finalPrice', '999 €');
+
+    const mockTriggerEl = document.createElement('button');
+
+    if (!jasmine.isSpy(mockTriggerEl.getBoundingClientRect)) {
+      spyOn(mockTriggerEl, 'getBoundingClientRect').and.returnValue({
+        bottom: 100,
+        left: 50,
+        width: 100,
+        height: 30,
+        right: 150,
+        top: 70,
+        x: 50,
+        y: 70,
+        toJSON: () => {},
+      });
+    }
+
+    if (!jasmine.isSpy(document.body.getBoundingClientRect)) {
+      spyOn(document.body, 'getBoundingClientRect').and.returnValue({
+        top: 0,
+        left: 0,
+        bottom: 800,
+        right: 600,
+        height: 800,
+        width: 600,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      });
+    }
 
     fixture.componentRef.setInput('triggerElement', mockTriggerEl);
+    fixture.detectChanges();
 
-    component.isPopupMode.set(true);
+    tick();
     fixture.detectChanges();
 
     const hostElement = fixture.debugElement.nativeElement;
 
     expect(hostElement.style.position).toBe('absolute');
-    expect(hostElement.style.top).toBeTruthy();
-    expect(hostElement.style.left).toBeTruthy();
+    expect(hostElement.style.opacity).toBe('1');
+    expect(hostElement.style.display).toBe('block');
     expect(hostElement.style.zIndex).toBe('1050');
+  }));
+  it('should update isPopupMode when media query changes', () => {
+    const mediaQueryMock = {
+      matches: true,
+      addEventListener: jasmine.createSpy('addEventListener'),
+      removeEventListener: jasmine.createSpy('removeEventListener'),
+    };
 
-    const topValue = parseInt(hostElement.style.top);
-    const leftValue = parseInt(hostElement.style.left);
-    expect(topValue).toBeGreaterThan(
-      mockTriggerEl.getBoundingClientRect().bottom
-    );
-    expect(leftValue).toBe(mockTriggerEl.getBoundingClientRect().left);
+    let mediaChangeListener: any;
+    spyOn(window, 'matchMedia').and.returnValue({
+      ...mediaQueryMock,
+      addEventListener: (type: string, listener: any) => {
+        if (type === 'change') mediaChangeListener = listener;
+      },
+    } as any);
 
-    expect(hostElement.style.top).toBe('112px');
-    expect(hostElement.style.left).toBe('50px');
+    fixture = TestBed.createComponent(PriceBreakdownModalComponent);
+    component = fixture.componentInstance;
 
-    document.body.removeChild(mockTriggerEl);
+    fixture.componentRef.setInput('title', 'Test Location');
+    fixture.componentRef.setInput('duration', '7 días');
+    fixture.componentRef.setInput('items', mockBreakdownItems);
+    fixture.componentRef.setInput('finalPrice', '999 €');
+    fixture.detectChanges();
+
+    expect(component.isPopupMode()).toBeTrue();
+
+    mediaChangeListener({ matches: false });
+    expect(component.isPopupMode()).toBeFalse();
+
+    mediaChangeListener({ matches: true });
+    expect(component.isPopupMode()).toBeTrue();
   });
+
+  it('should call updatePosition when ResizeObserver detects changes and conditions are met', fakeAsync(() => {
+    let resizeCallback: () => void = () => {};
+    const mockResizeObserver = {
+      observe: jasmine.createSpy('observe'),
+      disconnect: jasmine.createSpy('disconnect'),
+    };
+    (window as any).ResizeObserver = function (callback: any) {
+      resizeCallback = callback;
+      return mockResizeObserver;
+    };
+
+    spyOn<any>(PriceBreakdownModalComponent.prototype, 'updatePosition');
+
+    fixture = TestBed.createComponent(PriceBreakdownModalComponent);
+    component = fixture.componentInstance;
+
+    fixture.componentRef.setInput('title', 'Test Location');
+    fixture.componentRef.setInput('duration', '7 días');
+    fixture.componentRef.setInput('items', mockBreakdownItems);
+    fixture.componentRef.setInput('finalPrice', '999 €');
+
+    const mockTriggerEl = document.createElement('button');
+    fixture.componentRef.setInput('triggerElement', mockTriggerEl);
+
+    (component as any).isPopupMode.set(true);
+
+    fixture.detectChanges();
+
+    if (resizeCallback) resizeCallback();
+    tick();
+
+    expect((component as any).updatePosition).toHaveBeenCalled();
+
+    (component as any).isPopupMode.set(false);
+    (component as any).updatePosition.calls.reset();
+
+    if (resizeCallback) resizeCallback();
+    tick();
+
+    expect((component as any).updatePosition).not.toHaveBeenCalled();
+  }));
+
+  it('should reset element position when not in popup mode or no trigger element', fakeAsync(() => {
+    const positionService = TestBed.inject(PositionService);
+    spyOn(positionService, 'resetElementPosition');
+    spyOn(positionService, 'positionElementRelativeToTrigger');
+    spyOn<any>(component, 'removeClickOutsideListener');
+
+    component.isPopupMode.set(false);
+    fixture.componentRef.setInput('triggerElement', null);
+
+    fixture.detectChanges();
+    tick();
+
+    expect(positionService.resetElementPosition).toHaveBeenCalled();
+    expect(component['removeClickOutsideListener']).toHaveBeenCalled();
+    expect(
+      positionService.positionElementRelativeToTrigger
+    ).not.toHaveBeenCalled();
+  }));
+
+  it('should position element relative to trigger when in popup mode with valid trigger', fakeAsync(() => {
+    const positionService = TestBed.inject(PositionService);
+    spyOn(positionService, 'positionElementRelativeToTrigger');
+    spyOn<any>(component, 'setupClickOutsideListener');
+
+    component.isPopupMode.set(true);
+    const mockTriggerEl = document.createElement('button');
+    fixture.componentRef.setInput('triggerElement', mockTriggerEl);
+
+    (component as any).updatePosition();
+    tick();
+
+    expect(
+      positionService.positionElementRelativeToTrigger
+    ).toHaveBeenCalledWith(
+      mockTriggerEl,
+      component['el'].nativeElement,
+      component['renderer']
+    );
+  }));
+
+  it('should call onClose when clicking outside the modal', fakeAsync(() => {
+    const positionService = TestBed.inject(PositionService);
+    let capturedCallback: () => void = () => {};
+
+    spyOn(positionService, 'addClickOutsideListener').and.callFake(
+      (element, renderer, callback, excluded) => {
+        capturedCallback = callback;
+        return () => {};
+      }
+    );
+
+    spyOn(component, 'onClose');
+
+    (component as any).setupClickOutsideListener();
+
+    if (capturedCallback) capturedCallback();
+    tick();
+
+    expect(component.onClose).toHaveBeenCalled();
+  }));
 });

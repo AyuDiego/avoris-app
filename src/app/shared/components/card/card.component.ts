@@ -2,14 +2,14 @@ import { CurrencyPipe } from '@angular/common';
 import {
   Component,
   ElementRef,
-  OnDestroy,
-  ViewChild,
+  OnDestroy, 
   afterNextRender,
   computed,
   inject,
   input,
   output,
   signal,
+  viewChild
 } from '@angular/core';
 
 import { CardData } from 'src/app/mock-data/cards.mock';
@@ -33,22 +33,13 @@ import { TagComponent } from '../tag/tag.component';
   styleUrl: './card.component.scss',
 })
 export class CardComponent implements OnDestroy {
+  readonly detailsButtonRef = viewChild.required<ElementRef<HTMLElement>>('detailsBtnRef');
   readonly data = input.required<CardData>();
   readonly detailsClicked = output<void>();
   readonly reserveClicked = output<void>();
   readonly isDetailsOpen = signal(false);
-
-  @ViewChild('detailsBtnRef') detailsButtonRef:
-    | ElementRef<HTMLElement>
-    | undefined;
-
   readonly triggerElementRef = signal<HTMLElement | null>(null);
   readonly isTablet = signal(window.matchMedia('(min-width: 744px)').matches);
-
-  private readonly _mql = window.matchMedia('(min-width: 744px)');
-  private readonly _mqlListener = (e: MediaQueryListEvent) =>
-    this.isTablet.set(e.matches);
-
   readonly breakdownItems = computed<BreakdownItem[]>(() => {
     const cardData = this.data();
     return [
@@ -60,7 +51,6 @@ export class CardComponent implements OnDestroy {
       { label: 'Lorem ipsum', value: cardData.priceDetails?.other ?? 'N/A' },
     ];
   });
-
   readonly finalPriceValue = computed<string>(() => {
     const cardData = this.data();
     if (cardData.priceDetails?.final) {
@@ -78,14 +68,16 @@ export class CardComponent implements OnDestroy {
   });
 
   private readonly currencyPipe = inject(CurrencyPipe);
+  private readonly _mql = window.matchMedia('(min-width: 744px)');
+  private readonly _mqlListener = (e: MediaQueryListEvent) =>
+    this.isTablet.set(e.matches);
+  private currentTriggerElement: HTMLElement | null = null;
 
   constructor() {
     this._mql.addEventListener('change', this._mqlListener);
 
-    afterNextRender(() => {
-      if (this.detailsButtonRef) {
-        this.triggerElementRef.set(this.detailsButtonRef.nativeElement);
-      }
+    afterNextRender(() => { 
+      this.triggerElementRef.set(this.detailsButtonRef().nativeElement);
     });
   }
 
@@ -101,7 +93,18 @@ export class CardComponent implements OnDestroy {
     this.reserveClicked.emit();
   }
 
-  toggleDetails(): void {
-    this.isDetailsOpen.update((open) => !open);
+  toggleDetails(event?: Event): void {
+    const oldState = this.isDetailsOpen();
+    
+    if (oldState && event && 
+        event.target instanceof HTMLElement && 
+        this.currentTriggerElement === event.target) {
+      this.isDetailsOpen.set(false);
+    } else {
+      if (event && event.target instanceof HTMLElement) {
+        this.currentTriggerElement = event.target;
+      }
+      this.isDetailsOpen.set(!oldState);
+    }
   }
 }

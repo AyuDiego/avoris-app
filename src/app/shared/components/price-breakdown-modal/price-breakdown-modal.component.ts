@@ -10,7 +10,8 @@ import {
   output,
   Renderer2,
   signal,
-} from '@angular/core'; 
+} from '@angular/core';
+import { PositionService } from 'src/app/core/services/position.service';
 import { IconComponent } from '../icon/icon.component';
 
 export interface BreakdownItem {
@@ -26,6 +27,7 @@ export interface BreakdownItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PriceBreakdownModalComponent implements OnDestroy {
+  // Inputs
   readonly title = input.required<string>();
   readonly duration = input.required<string>();
   readonly items = input.required<BreakdownItem[]>();
@@ -33,17 +35,44 @@ export class PriceBreakdownModalComponent implements OnDestroy {
   readonly finalPrice = input.required<string>();
   readonly triggerElement = input<HTMLElement | null>(null);
 
+  // Outputs
   readonly closeModal = output<void>();
 
+  // Propiedades públicas
+  readonly isPopupMode = signal(false);
+
+  // Servicios inyectados
   private readonly el = inject(ElementRef<HTMLElement>);
   private readonly renderer = inject(Renderer2);
+  private readonly positionService = inject(PositionService);
   private readonly document = inject(DOCUMENT);
 
-  readonly isPopupMode = signal(false);
+  // Propiedades privadas
   private mediaQueryList: MediaQueryList | null = null;
   private clickListenerUnlisten: (() => void) | null = null;
+  private resizeObserver: ResizeObserver | null = null;
 
   constructor() {
+    this.setupResponsiveMode();
+    this.setupResizeObserver();
+    this.setupPositioningEffect();
+  }
+
+  // Hooks del ciclo de vida
+  ngOnDestroy(): void {
+    this.removeClickOutsideListener();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  // Métodos públicos
+  onClose(): void {
+    this.closeModal.emit();
+  }
+
+  // Métodos privados
+  private setupResponsiveMode(): void {
     if (typeof window !== 'undefined') {
       this.mediaQueryList = window.matchMedia('(min-width: 744px)');
       this.isPopupMode.set(this.mediaQueryList.matches);
@@ -56,90 +85,70 @@ export class PriceBreakdownModalComponent implements OnDestroy {
         }
       );
     }
+  }
 
+  private setupResizeObserver(): void {
+    if (typeof window !== 'undefined') {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.isPopupMode() && this.triggerElement()) {
+          this.updatePosition();
+        }
+      });
+      this.resizeObserver.observe(this.document.body);
+    }
+  }
+
+  private setupPositioningEffect(): void {
     effect((onCleanup) => {
       const isPopup = this.isPopupMode();
       const trigger = this.triggerElement();
       const hostElement = this.el.nativeElement;
 
-      if (isPopup && trigger) {
-        this.positionPopup(trigger, hostElement);
-        setTimeout(() => {
-          if (this.isPopupMode()) {
-            this.addClickOutsideListener();
-          }
-        }, 0);
-      } else {
-        this.resetPosition(hostElement);
-        this.removeClickOutsideListener();
-      }
+      const timerId = setTimeout(() => {
+        if (isPopup && trigger) {
+          this.positionService.positionElementRelativeToTrigger(
+            trigger,
+            hostElement,
+            this.renderer
+          );
+          this.setupClickOutsideListener();
+        } else {
+          this.positionService.resetElementPosition(hostElement, this.renderer);
+          this.removeClickOutsideListener();
+        }
+      }, 0);
 
       onCleanup(() => {
+        clearTimeout(timerId);
         this.removeClickOutsideListener();
       });
     });
   }
 
-  ngOnDestroy(): void {
-    this.removeClickOutsideListener();
-  }
+  private updatePosition(): void {
+    const trigger = this.triggerElement();
+    const hostElement = this.el.nativeElement;
 
-  /**
-   * Posiciona el popup justo debajo del triggerElement.
-   * Si el modal está dentro de un contenedor con position: relative, calcula la posición relativa a ese contenedor.
-   * Si está en el body, calcula la posición absoluta respecto al documento.
-   */
-  private positionPopup(
-    triggerEl: HTMLElement,
-    hostElement: HTMLElement
-  ): void {
-    const triggerRect = triggerEl.getBoundingClientRect();
-    let offsetParent = hostElement.offsetParent as HTMLElement | null;
-    if (!offsetParent) offsetParent = document.body;
-
-    const parentRect = offsetParent.getBoundingClientRect();
-
-    let top = triggerRect.bottom - parentRect.top + 4;
-    let left = triggerRect.left - parentRect.left;
-
-    const parentWidth =
-      offsetParent === document.body
-        ? window.innerWidth
-        : offsetParent.offsetWidth;
-
-    this.renderer.setStyle(hostElement, 'position', 'absolute');
-    this.renderer.setStyle(hostElement, 'top', `${top}px`);
-    this.renderer.setStyle(hostElement, 'left', `${left}px`);
-    this.renderer.setStyle(hostElement, 'transform', 'none');
-    this.renderer.setStyle(hostElement, 'z-index', '1050');
-  }
-
-  private resetPosition(hostElement: HTMLElement): void {
-    this.renderer.removeStyle(hostElement, 'position');
-    this.renderer.removeStyle(hostElement, 'top');
-    this.renderer.removeStyle(hostElement, 'left');
-    this.renderer.removeStyle(hostElement, 'width');
-    this.renderer.removeStyle(hostElement, 'transform');
-    this.renderer.removeStyle(hostElement, 'z-index');
-  }
-
-  private handleClickOutside = (event: MouseEvent) => {
-    if (
-      this.isPopupMode() &&
-      !this.el.nativeElement.contains(event.target as Node)
-    ) {
-      this.onClose();
-    }
-  };
-
-  private addClickOutsideListener(): void {
-    if (!this.clickListenerUnlisten && typeof document !== 'undefined') {
-      this.clickListenerUnlisten = this.renderer.listen(
-        this.document,
-        'click',
-        this.handleClickOutside
+    if (this.isPopupMode() && trigger) {
+      this.positionService.positionElementRelativeToTrigger(
+        trigger,
+        hostElement,
+        this.renderer
       );
     }
+  }
+
+  private setupClickOutsideListener(): void {
+    this.removeClickOutsideListener();
+    const trigger = this.triggerElement();
+    const excluded = trigger ? [trigger] : [];
+
+    this.clickListenerUnlisten = this.positionService.addClickOutsideListener(
+      this.el.nativeElement,
+      this.renderer,
+      () => this.onClose(),
+      excluded
+    );
   }
 
   private removeClickOutsideListener(): void {
@@ -147,9 +156,5 @@ export class PriceBreakdownModalComponent implements OnDestroy {
       this.clickListenerUnlisten();
       this.clickListenerUnlisten = null;
     }
-  }
-
-  onClose(): void {
-    this.closeModal.emit();
   }
 }
